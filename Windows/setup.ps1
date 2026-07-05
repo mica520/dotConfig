@@ -155,54 +155,33 @@ function Do-Install {
         $sourceRoot = $pkg.SourceRoot
 
         if ($pkg.Name -in $directPackages) {
-            $sourcePath = [System.IO.Path]::Combine($ScriptDir, $sourceRoot, $package)
+            # Direct symbolic link (avoids winstow)
+            $relativeSource = Join-Path $sourceRoot $package
+            $sourcePath = Join-Path $ScriptDir $relativeSource
             $targetPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($target)
 
-            if ($pkg.Name -eq "powershell-profile") {
-                # Ensure target directory exists
-                if (!(Test-Path $targetPath)) {
-                    New-Item -ItemType Directory -Path $targetPath -Force | Out-Null
-                    Write-Host "  Created directory: $targetPath" -ForegroundColor $Yellow
-                }
-
-                # Link each item inside the powershell directory to the target
-                Get-ChildItem -Path $sourcePath -Force | ForEach-Object {
-                    $linkName = $_.Name
-                    $targetLink = Join-Path $targetPath $linkName
-                    # Remove existing (backup already done)
-                    if (Test-Path $targetLink) {
-                        Remove-Item -Path $targetLink -Force
-                        Write-Host "  Removed existing: $targetLink" -ForegroundColor $Yellow
-                    }
-                    # Create symbolic link
-                    New-Item -ItemType SymbolicLink -Path $targetLink -Target $_.FullName -Force | Out-Null
-                    Write-Host "  Linked $linkName to $targetLink" -ForegroundColor $Green
-                }
-            } else {
-                # For nvim and vscode-extensions: link single file/directory
-                # Ensure parent directory exists
-                $parent = Split-Path $targetPath -Parent
-                if (!(Test-Path $parent)) {
-                    New-Item -ItemType Directory -Path $parent -Force | Out-Null
-                    Write-Host "  Created directory: $parent" -ForegroundColor $Yellow
-                }
-
-                # Remove existing target
-                if (Test-Path $targetPath) {
-                    Remove-Item -Path $targetPath -Force
-                    Write-Host "  Removed existing: $targetPath" -ForegroundColor $Yellow
-                }
-
-                # Check source exists
-                if (!(Test-Path $sourcePath)) {
-                    Write-Warning "Source file not found: $sourcePath. Skipping link for $($pkg.Name)."
-                    continue
-                }
-
-                # Create symbolic link
-                New-Item -ItemType SymbolicLink -Path $targetPath -Target $sourcePath -Force | Out-Null
-                Write-Host "  Linked $($pkg.Name) (symbolic link) to $targetPath" -ForegroundColor $Green
+            # Ensure parent directory exists
+            $parent = Split-Path $targetPath -Parent
+            if (!(Test-Path $parent)) {
+                New-Item -ItemType Directory -Path $parent -Force | Out-Null
+                Write-Host "  Created directory: $parent" -ForegroundColor $Yellow
             }
+
+            # Remove existing target (file or directory)
+            if (Test-Path $targetPath) {
+                Remove-Item -Path $targetPath -Force
+                Write-Host "  Removed existing: $targetPath" -ForegroundColor $Yellow
+            }
+
+            # Check source exists
+            if (!(Test-Path $sourcePath)) {
+                Write-Warning "Source file not found: $sourcePath. Skipping link for $($pkg.Name)."
+                continue
+            }
+
+            # Create symbolic link
+            New-Item -ItemType SymbolicLink -Path $targetPath -Target $sourcePath -Force | Out-Null
+            Write-Host "  Linked $($pkg.Name) (symbolic link) to $targetPath" -ForegroundColor $Green
         } else {
             # Use winstow for other packages
             Write-Host "  Linking $($pkg.Name) to $target" -ForegroundColor $Green
