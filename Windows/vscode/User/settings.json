@@ -1,0 +1,10 @@
+{
+    "git.ignoreMissingGitWarning": true,
+    "editor.fontFamily": "'JetBrainsMono Nerd Font Propo',悠哉字体,Consolas, 'Courier New', monospace",
+    "workbench.editor.empty.hint": "hidden",
+    "git.openRepositoryInParentFolders": "never",
+    "security.allowedUNCHosts": [
+        "wsl.localhost"
+    ],
+    "workbench.colorTheme": "Tokyo Night"
+}

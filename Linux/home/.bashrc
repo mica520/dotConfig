@@ -161,3 +161,16 @@ export NVM_DIR="$HOME/.nvm"
 
 export name=mica
 eval "$(starship init bash)"
+
+## 安装软件包后自动更新已安装列表
+apt() {
+  case "$1" in
+  install | remove | purge | autoremove)
+    sudo apt "$@"
+    apt-mark showmanual >~/dotConfig/Linux/manual-packages.list
+    ;;
+  *)
+    sudo apt "$@"
+    ;;
+  esac
+}

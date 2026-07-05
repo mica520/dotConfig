@@ -1,0 +1,220 @@
+{
+	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
+	"CreationDate" : "2026-07-05T19:22:47.041-00:00",
+	"Sources" : 
+	[
+		{
+			"Packages" : 
+			[
+				{
+					"PackageIdentifier" : "7zip.7zip",
+					"Version" : "26.02"
+				},
+				{
+					"PackageIdentifier" : "Git.Git",
+					"Version" : "2.55.0.2"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.OneDrive",
+					"Version" : "26.106.0603.0003"
+				},
+				{
+					"PackageIdentifier" : "TigerVNC.TigerVNC",
+					"Version" : "1.16.2"
+				},
+				{
+					"PackageIdentifier" : "Tencent.TencentMeeting",
+					"Version" : "3.43.21.403"
+				},
+				{
+					"PackageIdentifier" : "Zen-Team.Zen-Browser",
+					"Version" : "1.21.5b"
+				},
+				{
+					"PackageIdentifier" : "docmirror.dev-sidecar",
+					"Version" : "2.2.0"
+				},
+				{
+					"PackageIdentifier" : "glzr-io.glazewm",
+					"Version" : "3.9.1"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.CLRTypesSQLServer.2019",
+					"Version" : "15.0.2000.5"
+				},
+				{
+					"PackageIdentifier" : "Starship.Starship",
+					"Version" : "1.26.0"
+				},
+				{
+					"PackageIdentifier" : "AmN.yasb",
+					"Version" : "2.0.5"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.msodbcsql.17",
+					"Version" : "17.11.1.1"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WebDeploy",
+					"Version" : "10.0.9419"
+				},
+				{
+					"PackageIdentifier" : "Neovim.Neovim",
+					"Version" : "0.12.3"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VisualStudio.Community",
+					"Version" : "18.7.2"
+				},
+				{
+					"PackageIdentifier" : "GnuWin32.File",
+					"Version" : "5.03"
+				},
+				{
+					"PackageIdentifier" : "Google.Chrome.EXE",
+					"Version" : "150.0.7871.47"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.Edge",
+					"Version" : "150.0.4078.48"
+				},
+				{
+					"PackageIdentifier" : "Tencent.QQ.NT",
+					"Version" : "9.9.31.49738"
+				},
+				{
+					"PackageIdentifier" : "RamenSoftware.Windhawk",
+					"Version" : "1.7.3"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x64",
+					"Version" : "14.51.36247.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x86",
+					"Version" : "14.51.36247.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.DotNet.DesktopRuntime.9",
+					"Version" : "9.0.17"
+				},
+				{
+					"PackageIdentifier" : "Bitwarden.Bitwarden",
+					"Version" : "2026.5.0"
+				},
+				{
+					"PackageIdentifier" : "BrechtSanders.WinLibs.POSIX.UCRT",
+					"Version" : "16.1.0-14.0.0-r2"
+				},
+				{
+					"PackageIdentifier" : "Fastfetch-cli.Fastfetch",
+					"Version" : "2.65.2"
+				},
+				{
+					"PackageIdentifier" : "JesseDuffield.lazygit",
+					"Version" : "0.62.2"
+				},
+				{
+					"PackageIdentifier" : "MathiasCodes.Winstow",
+					"Version" : "0.3.0"
+				},
+				{
+					"PackageIdentifier" : "SumatraPDF.SumatraPDF",
+					"Version" : "3.6.1"
+				},
+				{
+					"PackageIdentifier" : "vim.vim",
+					"Version" : "9.2.758"
+				},
+				{
+					"PackageIdentifier" : "junegunn.fzf",
+					"Version" : "0.73.1"
+				},
+				{
+					"PackageIdentifier" : "sharkdp.fd",
+					"Version" : "10.4.2"
+				},
+				{
+					"PackageIdentifier" : "sxyazi.yazi",
+					"Version" : "26.5.6"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VisualStudioCode",
+					"Version" : "1.127.0"
+				},
+				{
+					"PackageIdentifier" : "rocksdanister.LivelyWallpaper",
+					"Version" : "2.2.1.0"
+				},
+				{
+					"PackageIdentifier" : "CharlesMilette.TranslucentTB",
+					"Version" : "2026.1.0.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.Teams",
+					"Version" : "26163.405.4842.717"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.AppInstaller",
+					"Version" : "1.29.280.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.DotNet.Native.Runtime",
+					"Version" : "2.2.28604.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.UI.Xaml.2.7",
+					"Version" : "7.2409.9001.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.UI.Xaml.2.8",
+					"Version" : "8.2511.26001.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCLibs.Desktop.14",
+					"Version" : "14.0.33728.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCLibs.14",
+					"Version" : "14.0.33519.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.5",
+					"Version" : "1.5.9"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.6",
+					"Version" : "1.6.9"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.7",
+					"Version" : "1.7.9"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.8",
+					"Version" : "1.8.9"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.2.1",
+					"Version" : "2.2.0.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsTerminal",
+					"Version" : "1.24.11321.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WSL",
+					"Version" : "2.7.8.0"
+				}
+			],
+			"SourceDetails" : 
+			{
+				"Argument" : "https://cdn.winget.microsoft.com/cache",
+				"Identifier" : "Microsoft.Winget.Source_8wekyb3d8bbwe",
+				"Name" : "winget",
+				"Type" : "Microsoft.PreIndexed.Package"
+			}
+		}
+	],
+	"WinGetVersion" : "1.29.280"
+}

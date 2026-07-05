@@ -1,0 +1,11 @@
+gui:
+  language: zh-CN
+customCommands:
+  - key: 'C' # 你可以自定义
+    command: "git commit -m '{{.Form.Message}} - $(date)'" # 自动添加时间戳
+    context: 'files'
+    description: 'Commit with timestamp'
+    prompts:
+      - type: 'input'
+        title: 'Commit Message:'
+        key: 'Message'

@@ -1,0 +1,49 @@
+[mgr]
+show_hidden = true
+
+[[plugin.prepend_fetchers]]
+id = "git"
+url = "*"
+run = "git"
+group = "git"
+
+
+[plugin]
+prepend_preloaders = [
+  { mime = "{audio,video,image}/*", run = "mediainfo" },
+  { url = "/run/user/1000/gvfs/**/*", run = "noop" },
+  { url = "/run/media/USER_NAME/**/*", run = "noop" },
+]
+prepend_previewers = [
+  { mime = "{audio,video,image}/*", run = "mediainfo" },
+  { mime = "application/subrip", run = "mediainfo" },
+  { mime = "application/postscript", run = "mediainfo" },
+  { url = "*/", run = "folder" },
+  { url = "/run/user/1000/gvfs/**/*", run = "noop" },
+  { url = "/run/media/USER_NAME/**/*", run = "noop" },
+  # { url = "*.csv", run = "duckdb" },
+  { url = "*.tsv", run = "duckdb" },
+  { url = "*.json", run = "duckdb" },
+  { url = "*.parquet", run = "duckdb" },
+  { url = "*.xlsx", run = "duckdb" },
+  { url = "*.db", run = "duckdb" },
+  { url = "*.duckdb", run = "duckdb" },
+  { url = "*.docx", run = "docx-preview" },
+  { url = "*.doc", run = "docx-preview" },
+]
+
+
+
+[opener]
+play = [
+	{ run = "mpv %s", orphan = true, for = "unix" },
+	{ run = '"C:\Program Files\MPV Player', orphan = true, for = "windows" }
+]
+edit = [
+	{ run = "nvim %s", block = true, for = "unix" },
+	{ run = "nvim %s", block = true, for = "windows" },
+]
+open = [
+	{ run = "xdg-open %s1", desc = "Open" },
+]
+# ...

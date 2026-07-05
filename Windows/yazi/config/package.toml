@@ -1,0 +1,49 @@
+[[plugin.deps]]
+use = "yazi-rs/plugins:git"
+rev = "598cdb6"
+hash = "b94720e0ef40cb0e97093fabd9694775"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-paste"
+rev = "598cdb6"
+hash = "e44dcc831ee62d5f79a1f8130cfdc847"
+
+[[plugin.deps]]
+use = "Ape/simple-status"
+rev = "d0da104"
+hash = "245d0b185edd2f12b52f12f12057889f"
+
+[[plugin.deps]]
+use = "Reledia/glow"
+rev = "bd3eaa5"
+hash = "f8d302ba41ab9deb4133fe3d0a64b6c6"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:piper"
+rev = "598cdb6"
+hash = "1dee6493ff2a9d9d75c0057d97093bcc"
+
+[[plugin.deps]]
+use = "macydnah/office"
+rev = "41ebef8"
+hash = "1d856e7731bd5b3c5ed56112f36b256c"
+
+[[plugin.deps]]
+use = "wylie102/duckdb"
+rev = "3f8c863"
+hash = "5112de4ea9ce83c9b6aa748b3fad665d"
+
+[[plugin.deps]]
+use = "mica520/7z-compress"
+rev = "226da76"
+hash = "32ff0ecb953fccb771ddfe715bdcee8e"
+
+[[plugin.deps]]
+use = "mica520/7z-extract"
+rev = "b00717b"
+hash = "b622bb733ca49feb2853fe4de3fcee3d"
+
+[[flavor.deps]]
+use = "yazi-rs/flavors:catppuccin-mocha"
+rev = "0f9204b"
+hash = "5ebc8659108fcb68fe853e523115ed3c"

@@ -23,7 +23,7 @@ prepend_keymap = [
 { on = [ "g", "w" ], run = "cd ~/Documents/", desc = "Documents" },
 { on = [ "g", "u" ], run = "cd ~/Public/", desc = "Public" },
 { on = [ "g", "t" ], run = "cd ~/Templates/", desc = "Templates" },
-{ on = [ "g", "c" ], run = "cd ~/.config/", desc = "~/.config" },
+{ on = [ "g", "c" ], run = "cd ~/dotConfig/Linux", desc = "~/dotConfig/" },
 { on = [ "g", "l" ], run = "cd ~/.local/", desc = "~/.local" },
 { on = [ "g", "e" ], run = "cd ~/AppData/", desc = "~/AppData/" },
 { on = [ "g", "<Space>" ], run = "cd --interactive", desc = "交互式目录" },
