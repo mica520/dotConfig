@@ -5,6 +5,10 @@ return {
     "nvim-treesitter/nvim-treesitter",
   },
   opts = {
+    rocks = {
+      hererocks = true, -- 启用内置 luarocks 管理
+      -- 其他 rocks 配置保持不变
+    },
     backend = "sixel", -- 根据终端调整：kitty / sixel / ueberzug
     integrations = {
       markdown = {

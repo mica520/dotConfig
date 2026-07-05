@@ -6,5 +6,6 @@
     "security.allowedUNCHosts": [
         "wsl.localhost"
     ],
-    "workbench.colorTheme": "Tokyo Night"
+    "workbench.colorTheme": "Atom One Dark",
+    "editor.fontSize": 18
 }

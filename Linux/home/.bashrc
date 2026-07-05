@@ -139,18 +139,33 @@ function y() {
 }
 
 # >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/mica/miniconda3/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
-if [ $? -eq 0 ]; then
-  eval "$__conda_setup"
-else
-  if [ -f "/home/mica/miniconda3/etc/profile.d/conda.sh" ]; then
-    . "/home/mica/miniconda3/etc/profile.d/conda.sh"
-  else
-    export PATH="/home/mica/miniconda3/bin:$PATH"
+# !! 将 conda init 生成的代码替换为下面的内容 !!
+__conda_setup() {
+  # 设置为你实际的 Conda 安装路径
+  local CONDA_ROOT="$HOME/miniconda3" # 或 $HOME/anaconda3
+
+  # 如果存在，则初始化 conda
+  if [ -d "$CONDA_ROOT" ]; then
+    # 将 conda 的 bin 目录加入 PATH
+    export PATH="$CONDA_ROOT/bin:$PATH"
+    # 定义一个函数，用于实际的 conda 初始化
+    conda() {
+      # 取消函数自身的定义，避免重复加载
+      unset -f conda
+      # 执行真正的 conda 初始化
+      if [ -f "$CONDA_ROOT/etc/profile.d/conda.sh" ]; then
+        . "$CONDA_ROOT/etc/profile.d/conda.sh"
+      else
+        export PATH="$CONDA_ROOT/bin:$PATH"
+      fi
+      # 调用真正的 conda 命令
+      conda "$@"
+    }
   fi
-fi
-unset __conda_setup
+}
+# 调用设置函数
+__conda_setup
+unset -f __conda_setup
 # <<< conda initialize <<<
 
 . "$HOME/.cargo/env"

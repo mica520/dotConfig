@@ -21,8 +21,8 @@ $BackupDir = Join-Path $HOME "dotfiles_backup_$(Get-Date -Format 'yyyyMMdd_HHmms
 # Backup a single target (file or directory)
 function Backup-Target {
     param(
-        [string]$Target,          # The path to back up (e.g., %APPDATA%\yazi\config)
-        [string]$BackupSubPath    # Relative path inside the backup directory (e.g., yazi\config)
+        [string]$Target,
+        [string]$BackupSubPath
     )
     if (Test-Path $Target) {
         $backupTarget = Join-Path $BackupDir $BackupSubPath
@@ -36,7 +36,7 @@ function Backup-Target {
     }
 }
 
-# Check if winstow is available (only needed for non-vscode-extensions packages)
+# Check if winstow is available (only needed for packages using winstow)
 function Test-WinStow {
     if (!(Get-Command winstow -ErrorAction SilentlyContinue)) {
         Write-Error "winstow not found. Please install it via: winget install winstow"
@@ -47,20 +47,40 @@ function Test-WinStow {
 # Uninstall all symlinks
 function Do-Uninstall {
     Write-Host "Removing all symlinks..." -ForegroundColor $Blue
+
+    # Packages that use direct symbolic links
+    $directPackages = @("nvim", "vscode-extensions", "powershell-profile")
+
     foreach ($pkg in $Packages) {
-        if ($pkg.Name -eq "vscode-extensions") {
-            # Remove the symbolic link (just delete the target file/link)
-            $targetPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($pkg.Target)
-            if (Test-Path $targetPath) {
-                Remove-Item -Path $targetPath -Force
-                Write-Host "  Removed $($pkg.Name)" -ForegroundColor $Green
+        $target = $pkg.Target
+        $package = $pkg.Package
+        $sourceRoot = $pkg.SourceRoot
+        $targetPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($target)
+
+        if ($pkg.Name -in $directPackages) {
+            if ($pkg.Name -eq "powershell-profile") {
+                # Unlink each item inside the powershell directory
+                $sourceDir = [System.IO.Path]::Combine($ScriptDir, $sourceRoot, $package)
+                if (Test-Path $sourceDir) {
+                    Get-ChildItem -Path $sourceDir -Force | ForEach-Object {
+                        $linkPath = Join-Path $targetPath $_.Name
+                        if (Test-Path $linkPath) {
+                            Remove-Item -Path $linkPath -Force
+                            Write-Host "  Removed $($_.Name) from $targetPath" -ForegroundColor $Green
+                        }
+                    }
+                }
             } else {
-                Write-Host "  $($pkg.Name) not found, skipping." -ForegroundColor $Yellow
+                # Direct single-target removal (nvim or extensions.json)
+                if (Test-Path $targetPath) {
+                    Remove-Item -Path $targetPath -Force
+                    Write-Host "  Removed $($pkg.Name)" -ForegroundColor $Green
+                } else {
+                    Write-Host "  $($pkg.Name) not found, skipping." -ForegroundColor $Yellow
+                }
             }
         } else {
-            $target = $pkg.Target
-            $package = $pkg.Package
-            $sourceRoot = $pkg.SourceRoot
+            # Use winstow for other packages
             Push-Location $sourceRoot
             winstow -D -t $target $package 2>$null
             Pop-Location
@@ -73,13 +93,12 @@ function Do-Uninstall {
 # Main installation function
 function Do-Install {
     Write-Host "Deploying Windows configurations..." -ForegroundColor $Green
-    Test-WinStow  # winstow is still used for other packages
+    Test-WinStow
 
     # Create backup directory
     New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
     Write-Host "Backup directory: $BackupDir" -ForegroundColor $Yellow
 
-    # Ask for confirmation
     $response = Read-Host "Continue? (y/N)"
     if ($response -notmatch '^[Yy]$') {
         Write-Host "Operation cancelled." -ForegroundColor $Red
@@ -88,37 +107,25 @@ function Do-Install {
 
     # Ensure required directories exist
     $configDir = Join-Path $HOME ".config"
-    if (!(Test-Path $configDir)) {
-        New-Item -ItemType Directory -Path $configDir -Force | Out-Null
-        Write-Host "Created $configDir" -ForegroundColor $Yellow
-    }
-
+    if (!(Test-Path $configDir)) { New-Item -ItemType Directory -Path $configDir -Force | Out-Null; Write-Host "Created $configDir" -ForegroundColor $Yellow }
     $vscodeDir = Join-Path $HOME ".vscode"
-    if (!(Test-Path $vscodeDir)) {
-        New-Item -ItemType Directory -Path $vscodeDir -Force | Out-Null
-        Write-Host "Created $vscodeDir" -ForegroundColor $Yellow
-    }
+    if (!(Test-Path $vscodeDir)) { New-Item -ItemType Directory -Path $vscodeDir -Force | Out-Null; Write-Host "Created $vscodeDir" -ForegroundColor $Yellow }
 
     Write-Host "`nBacking up existing configurations..." -ForegroundColor $Blue
     foreach ($pkg in $Packages) {
         $pkgName = $pkg.Name
 
-        # Special handling for packages that might target busy directories
+        # Special backup handling for packages that may target busy directories
         if ($pkgName -in @("home", "glazewm", "starship", "yasb")) {
             $pkgDir = Join-Path $pkg.SourceRoot $pkg.Package
             if (Test-Path $pkgDir) {
                 if ($pkgName -eq "starship") {
-                    # Only backup ~/.config/starship.toml
                     $targetFile = Join-Path $HOME ".config\starship.toml"
-                    $backupSubPath = "starship\starship.toml"
-                    Backup-Target -Target $targetFile -BackupSubPath $backupSubPath
+                    Backup-Target -Target $targetFile -BackupSubPath "starship\starship.toml"
                 } elseif ($pkgName -eq "yasb") {
-                    # Backup entire ~/.config/yasb directory
                     $targetDir = Join-Path $HOME ".config\yasb"
-                    $backupSubPath = "yasb"
-                    Backup-Target -Target $targetDir -BackupSubPath $backupSubPath
+                    Backup-Target -Target $targetDir -BackupSubPath "yasb"
                 } else {
-                    # For home, glazewm: backup each item individually
                     Get-ChildItem -Path $pkgDir -Force | ForEach-Object {
                         $itemName = $_.Name
                         $targetPath = Join-Path $pkg.Target $itemName
@@ -127,46 +134,77 @@ function Do-Install {
                     }
                 }
             }
+        } elseif ($pkgName -eq "powershell-profile") {
+            # Backup the specific profile file
+            Backup-Target -Target $PROFILE -BackupSubPath $pkg.BackupSubPath
         } else {
-            # For other packages (nvim, yazi-config, vscode-*), backup the whole target path
+            # Generic backup for other packages (including nvim)
             Backup-Target -Target $pkg.Target -BackupSubPath $pkg.BackupSubPath
         }
     }
     Write-Host "Backup complete.`n" -ForegroundColor $Green
 
     Write-Host "Creating symlinks..." -ForegroundColor $Blue
+
+    # Packages that use direct symbolic links (instead of winstow)
+    $directPackages = @("nvim", "vscode-extensions", "powershell-profile")
+
     foreach ($pkg in $Packages) {
         $target = $pkg.Target
         $package = $pkg.Package
         $sourceRoot = $pkg.SourceRoot
 
-        if ($pkg.Name -eq "vscode-extensions") {
-            # ---- Special handling: create symbolic link (avoids VSCode atomic save breaking the link) ----
-            $relativeSource = Join-Path $sourceRoot $package
-            $sourcePath = Join-Path $ScriptDir $relativeSource
-
+        if ($pkg.Name -in $directPackages) {
+            $sourcePath = [System.IO.Path]::Combine($ScriptDir, $sourceRoot, $package)
             $targetPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($target)
-            # Ensure parent directory exists
-            $parent = Split-Path $targetPath -Parent
-            if (!(Test-Path $parent)) {
-                New-Item -ItemType Directory -Path $parent -Force | Out-Null
-                Write-Host "  Created directory: $parent" -ForegroundColor $Yellow
+
+            if ($pkg.Name -eq "powershell-profile") {
+                # Ensure target directory exists
+                if (!(Test-Path $targetPath)) {
+                    New-Item -ItemType Directory -Path $targetPath -Force | Out-Null
+                    Write-Host "  Created directory: $targetPath" -ForegroundColor $Yellow
+                }
+
+                # Link each item inside the powershell directory to the target
+                Get-ChildItem -Path $sourcePath -Force | ForEach-Object {
+                    $linkName = $_.Name
+                    $targetLink = Join-Path $targetPath $linkName
+                    # Remove existing (backup already done)
+                    if (Test-Path $targetLink) {
+                        Remove-Item -Path $targetLink -Force
+                        Write-Host "  Removed existing: $targetLink" -ForegroundColor $Yellow
+                    }
+                    # Create symbolic link
+                    New-Item -ItemType SymbolicLink -Path $targetLink -Target $_.FullName -Force | Out-Null
+                    Write-Host "  Linked $linkName to $targetLink" -ForegroundColor $Green
+                }
+            } else {
+                # For nvim and vscode-extensions: link single file/directory
+                # Ensure parent directory exists
+                $parent = Split-Path $targetPath -Parent
+                if (!(Test-Path $parent)) {
+                    New-Item -ItemType Directory -Path $parent -Force | Out-Null
+                    Write-Host "  Created directory: $parent" -ForegroundColor $Yellow
+                }
+
+                # Remove existing target
+                if (Test-Path $targetPath) {
+                    Remove-Item -Path $targetPath -Force
+                    Write-Host "  Removed existing: $targetPath" -ForegroundColor $Yellow
+                }
+
+                # Check source exists
+                if (!(Test-Path $sourcePath)) {
+                    Write-Warning "Source file not found: $sourcePath. Skipping link for $($pkg.Name)."
+                    continue
+                }
+
+                # Create symbolic link
+                New-Item -ItemType SymbolicLink -Path $targetPath -Target $sourcePath -Force | Out-Null
+                Write-Host "  Linked $($pkg.Name) (symbolic link) to $targetPath" -ForegroundColor $Green
             }
-            # Remove existing target if present (file or directory)
-            if (Test-Path $targetPath) {
-                Remove-Item -Path $targetPath -Force
-                Write-Host "  Removed existing: $targetPath" -ForegroundColor $Yellow
-            }
-            # Check source file exists
-            if (!(Test-Path $sourcePath)) {
-                Write-Warning "Source file not found: $sourcePath. Skipping link for $($pkg.Name)."
-                continue
-            }
-            # Create symbolic link (requires admin rights or Developer Mode enabled)
-            New-Item -ItemType SymbolicLink -Path $targetPath -Target $sourcePath -Force | Out-Null
-            Write-Host "  Linked $($pkg.Name) (symbolic link) to $targetPath" -ForegroundColor $Green
         } else {
-            # ---- All other packages use winstow ----
+            # Use winstow for other packages
             Write-Host "  Linking $($pkg.Name) to $target" -ForegroundColor $Green
             Push-Location $sourceRoot
             winstow -D -t $target $package 2>$null
@@ -180,12 +218,6 @@ function Do-Install {
 }
 
 # ---------- Package Definitions ----------
-# Each package has:
-#   Name           - Display name
-#   SourceRoot     - Directory containing the package (relative to script root)
-#   Package        - The package directory name or file path inside SourceRoot
-#   Target         - Absolute target path to symlink to
-#   BackupSubPath  - Relative path inside the backup directory for this package
 $Packages = @(
     @{
         Name = "nvim"
@@ -222,15 +254,20 @@ $Packages = @(
         Target = "$env:APPDATA/Code/User"
         BackupSubPath = "vscode/User"
     },
-    # ---------- Modified package: vscode-extensions ----------
     @{
         Name = "vscode-extensions"
         SourceRoot = "vscode"
-        Package = ".vscode/extensions.json"                     # 源文件（注意单数）
-        Target = "$env:USERPROFILE/.vscode/extensions/extensions.json"  # 目标路径
+        Package = ".vscode/extensions.json"
+        Target = "$env:USERPROFILE/.vscode/extensions/extensions.json"
         BackupSubPath = ".vscode/extensions.json"
     },
-    # ---------------------------------------------------------
+    @{
+        Name = "powershell-profile"
+        SourceRoot = "."
+        Package = "powershell"
+        Target = Split-Path $PROFILE          # parent directory of $PROFILE
+        BackupSubPath = "powershell/Microsoft.PowerShell_profile.ps1"
+    },
     @{
         Name = "glazewm"
         SourceRoot = "."

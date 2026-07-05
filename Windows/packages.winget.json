@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-07-05T19:22:47.041-00:00",
+	"CreationDate" : "2026-07-06T11:59:53.818-00:00",
 	"Sources" : 
 	[
 		{
@@ -33,6 +33,10 @@
 				{
 					"PackageIdentifier" : "docmirror.dev-sidecar",
 					"Version" : "2.2.0"
+				},
+				{
+					"PackageIdentifier" : "OpenJS.NodeJS",
+					"Version" : "26.4.0"
 				},
 				{
 					"PackageIdentifier" : "glzr-io.glazewm",
@@ -107,6 +111,10 @@
 					"Version" : "16.1.0-14.0.0-r2"
 				},
 				{
+					"PackageIdentifier" : "BurntSushi.ripgrep.GNU",
+					"Version" : "15.1.0"
+				},
+				{
 					"PackageIdentifier" : "Fastfetch-cli.Fastfetch",
 					"Version" : "2.65.2"
 				},
@@ -125,6 +133,10 @@
 				{
 					"PackageIdentifier" : "vim.vim",
 					"Version" : "9.2.758"
+				},
+				{
+					"PackageIdentifier" : "arndawg.tmux-windows",
+					"Version" : "3.6a-win32.7"
 				},
 				{
 					"PackageIdentifier" : "junegunn.fzf",
@@ -179,10 +191,6 @@
 					"Version" : "14.0.33519.0"
 				},
 				{
-					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.5",
-					"Version" : "1.5.9"
-				},
-				{
 					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.6",
 					"Version" : "1.6.9"
 				},
@@ -213,6 +221,22 @@
 				"Identifier" : "Microsoft.Winget.Source_8wekyb3d8bbwe",
 				"Name" : "winget",
 				"Type" : "Microsoft.PreIndexed.Package"
+			}
+		},
+		{
+			"Packages" : 
+			[
+				{
+					"PackageIdentifier" : "9N5CGL8FTTT3",
+					"Version" : "0.2.0.0"
+				}
+			],
+			"SourceDetails" : 
+			{
+				"Argument" : "https://storeedgefd.dsx.mp.microsoft.com/v9.0",
+				"Identifier" : "StoreEdgeFD",
+				"Name" : "msstore",
+				"Type" : "Microsoft.Rest"
 			}
 		}
 	],
