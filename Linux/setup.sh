@@ -94,6 +94,7 @@ do_install() {
   backup_path "$HOME/.config/starship.toml" "starship/starship.toml"
   backup_path "$HOME/.bashrc" "home/.bashrc"
   backup_path "$HOME/.gitconfig" "home/.gitconfig"
+  backup_path "$HOME/.condarc" "home/.condarc"
   backup_path "$HOME/.tmux.conf" "home/.tmux.conf"
 
   echo -e "${GREEN}✅ 备份完成${NC}\n"
