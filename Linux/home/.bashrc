@@ -139,33 +139,25 @@ function y() {
 }
 
 # >>> conda initialize >>>
-# !! 将 conda init 生成的代码替换为下面的内容 !!
-__conda_setup() {
-  # 设置为你实际的 Conda 安装路径
-  local CONDA_ROOT="$HOME/miniconda3" # 或 $HOME/anaconda3
-
-  # 如果存在，则初始化 conda
+conda() {
+  local CONDA_ROOT="$HOME/miniconda3" # 根据实际情况修改
   if [ -d "$CONDA_ROOT" ]; then
-    # 将 conda 的 bin 目录加入 PATH
-    export PATH="$CONDA_ROOT/bin:$PATH"
-    # 定义一个函数，用于实际的 conda 初始化
-    conda() {
-      # 取消函数自身的定义，避免重复加载
-      unset -f conda
-      # 执行真正的 conda 初始化
-      if [ -f "$CONDA_ROOT/etc/profile.d/conda.sh" ]; then
-        . "$CONDA_ROOT/etc/profile.d/conda.sh"
-      else
-        export PATH="$CONDA_ROOT/bin:$PATH"
-      fi
-      # 调用真正的 conda 命令
-      conda "$@"
-    }
+    # 取消当前函数定义，防止递归
+    unset -f conda
+    # 加载 Conda 初始化
+    if [ -f "$CONDA_ROOT/etc/profile.d/conda.sh" ]; then
+      . "$CONDA_ROOT/etc/profile.d/conda.sh"
+    else
+      export PATH="$CONDA_ROOT/bin:$PATH"
+    fi
+    # 执行真正的 conda 命令（此时 conda 可能是函数或外部命令）
+    conda "$@"
+  else
+    echo "Error: Conda installation not found at $CONDA_ROOT" >&2
+    return 1
   fi
 }
-# 调用设置函数
-__conda_setup
-unset -f __conda_setup
+# 注意：这里**不**调用 conda，只定义函数
 # <<< conda initialize <<<
 
 . "$HOME/.cargo/env"
