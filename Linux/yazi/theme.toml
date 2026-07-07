@@ -1,26 +1,26 @@
 # : Manager [[[
 
 [mgr]
-cwd = { fg = "#E5E5E5" }
+cwd = { fg = "#D4D4D4" }
 
 # Find
-find_keyword  = { fg = "#E95420", bold = true, italic = true, underline = true }
-find_position = { fg = "#E95420", bold = true, italic = true }
+find_keyword  = { fg = "#FAB387", bold = true, italic = true, underline = true }
+find_position = { fg = "#FAB387", bold = true, italic = true }
 
 # Marker
-marker_copied   = { fg = "#FF8C00", bg = "#FF8C00" }   # 亮橙
-marker_cut      = { fg = "#F1C40F", bg = "#F1C40F" }   # 黄
-marker_marked   = { fg = "#E95420", bg = "#E95420" }   # 主橙
-marker_selected = { fg = "#9B3C8E", bg = "#9B3C8E" }   # 紫
+marker_copied   = { fg = "#73DACA", bg = "#73DACA" }   # 青绿
+marker_cut      = { fg = "#EBCB8B", bg = "#EBCB8B" }   # 金色
+marker_marked   = { fg = "#8EC07C", bg = "#8EC07C" }   # 绿
+marker_selected = { fg = "#83A598", bg = "#83A598" }   # 蓝灰
 
 # Count
-count_copied   = { fg = "#1E1E1E", bg = "#FF8C00" }
-count_cut      = { fg = "#1E1E1E", bg = "#F1C40F" }
-count_selected = { fg = "#1E1E1E", bg = "#9B3C8E" }
+count_copied   = { fg = "#1E2326", bg = "#73DACA" }
+count_cut      = { fg = "#1E2326", bg = "#EBCB8B" }
+count_selected = { fg = "#1E2326", bg = "#83A598" }
 
 # Border
 border_symbol = "│"
-border_style  = { fg = "#E95420" }
+border_style  = { fg = "#73DACA" }
 
 # : ]]]
 
@@ -34,8 +34,8 @@ padding = { open = "█", close = "█" }
 # : Tabs [[[
 
 [tabs]
-active    = { fg = "#E95420", bold = true, bg = "#1E1E1E" }
-inactive  = { fg = "#A0A0A0", bg = "#1E1E1E" }
+active    = { fg = "#73DACA", bold = true, bg = "#1E2326" }
+inactive  = { fg = "#7A7A7A", bg = "#1E2326" }
 sep_inner = { open = "[", close = "]" }
 
 # : ]]]
@@ -44,16 +44,16 @@ sep_inner = { open = "[", close = "]" }
 
 [mode]
 # Normal mode
-normal_main = { bg = "#E95420", fg = "#1E1E1E", bold = true }
-normal_alt  = { bg = "#2A2A2A", fg = "#E5E5E5" }
+normal_main = { bg = "#73DACA", fg = "#1E2326", bold = true }
+normal_alt  = { bg = "#2D353B", fg = "#D4D4D4" }
 
 # Select mode
-select_main = { bg = "#9B3C8E", fg = "#1E1E1E", bold = true }
-select_alt  = { bg = "#2A2A2A", fg = "#E5E5E5" }
+select_main = { bg = "#83A598", fg = "#1E2326", bold = true }
+select_alt  = { bg = "#2D353B", fg = "#D4D4D4" }
 
 # Unset mode
-unset_main = { bg = "#77216F", fg = "#E5E5E5", bold = true }
-unset_alt  = { bg = "#2A2A2A", fg = "#E5E5E5" }
+unset_main = { bg = "#8EC07C", fg = "#1E2326", bold = true }
+unset_alt  = { bg = "#2D353B", fg = "#D4D4D4" }
 
 # : ]]]
 
@@ -61,16 +61,16 @@ unset_alt  = { bg = "#2A2A2A", fg = "#E5E5E5" }
 
 [status]
 # Permissions
-perm_type  = { fg = "#E95420" }   # 主橙
-perm_write = { fg = "#FF8C00" }   # 亮橙
-perm_read  = { fg = "#E74C3C" }   # 红
-perm_exec  = { fg = "#8AE234" }   # 绿
-perm_sep   = { fg = "#77216F" }   # 紫
+perm_type  = { fg = "#73DACA" }
+perm_write = { fg = "#EBCB8B" }
+perm_read  = { fg = "#FB4934" }   # 红
+perm_exec  = { fg = "#8EC07C" }
+perm_sep   = { fg = "#73DACA" }
 
 # Progress
 progress_label  = { bold = true }
-progress_normal = { fg = "#E95420", bg = "#2A2A2A" }
-progress_error  = { fg = "#E74C3C", bg = "#2A2A2A" }
+progress_normal = { fg = "#73DACA", bg = "#2D353B" }
+progress_error  = { fg = "#FB4934", bg = "#2D353B" }
 
 # : ]]]
 
@@ -78,29 +78,29 @@ progress_error  = { fg = "#E74C3C", bg = "#2A2A2A" }
 
 [which]
 cols = 3
-mask = { bg = "#2A2A2A" }
-cand = { fg = "#E95420" }
-rest = { fg = "#555555" }   # 暗显
-desc = { fg = "#E5E5E5" }
+mask = { bg = "#2D353B" }
+cand = { fg = "#73DACA" }
+rest = { fg = "#4A4A4A" }
+desc = { fg = "#D4D4D4" }
 separator = " ▶ "
-separator_style = { fg = "#E5E5E5" }
+separator_style = { fg = "#D4D4D4" }
 
 # : ]]]
 
 # : Notify [[[
 
 [notify]
-title_info  = { fg = "#9B3C8E" }
-title_warn  = { fg = "#E95420" }
-title_error = { fg = "#E74C3C" }
+title_info  = { fg = "#83A598" }
+title_warn  = { fg = "#EBCB8B" }
+title_error = { fg = "#FB4934" }
 
 # : ]]]
 
 # : Picker [[[
 
 [pick]
-border = { fg = "#E95420" }
-active = { fg = "#9B3C8E", bold = true }
+border = { fg = "#73DACA" }
+active = { fg = "#EBCB8B", bold = true }
 inactive = {}
 
 # : ]]]
@@ -108,33 +108,33 @@ inactive = {}
 # : Input [[[
 
 [input]
-border = { fg = "#E95420" }
-value  = { fg = "#E5E5E5" }
+border = { fg = "#73DACA" }
+value  = { fg = "#D4D4D4" }
 
 # : ]]]
 
 # : Completion [[[
 
 [cmp]
-border = { fg = "#E95420", bg = "#2A2A2A" }
+border = { fg = "#73DACA", bg = "#2D353B" }
 
 # : ]]]
 
 # : Tasks [[[
 
 [tasks]
-border  = { fg = "#E95420" }
+border  = { fg = "#73DACA" }
 title   = {}
-hovered = { fg = "#FF8C00", underline = true }
+hovered = { fg = "#EBCB8B", underline = true }
 
 # : ]]]
 
 # : Help [[[
 
 [help]
-on     = { fg = "#E5E5E5" }
-run    = { fg = "#E5E5E5" }
-footer = { fg = "#1E1E1E", bg = "#9B3C8E" }
+on     = { fg = "#D4D4D4" }
+run    = { fg = "#D4D4D4" }
+footer = { fg = "#1E2326", bg = "#83A598" }
 
 # : ]]]
 
@@ -144,24 +144,24 @@ footer = { fg = "#1E1E1E", bg = "#9B3C8E" }
 
 rules = [
     # Images
-    { mime = "image/*", fg = "#8AE234" },   # 绿色
+    { mime = "image/*", fg = "#8EC07C" },
 
     # Media
-    { mime = "{audio,video}/*", fg = "#F1C40F" },   # 黄色
+    { mime = "{audio,video}/*", fg = "#EBCB8B" },
 
     # Archives
-    { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#FF8C00" },   # 亮橙
+    { mime = "application/{zip,rar,7z*,tar,gzip,xz,zstd,bzip*,lzma,compress,archive,cpio,arj,xar,ms-cab*}", fg = "#FAB387" },
 
     # Documents
-    { mime = "application/{pdf,doc,rtf}", fg = "#8AE234" },   # 绿色
+    { mime = "application/{pdf,doc,rtf}", fg = "#8EC07C" },
 
     # Special files
-    { url = "*", is = "orphan", bg = "#E74C3C" },   # 红色背景
-    { url = "*", is = "exec", fg = "#8AE234" },     # 绿色
+    { url = "*", is = "orphan", bg = "#5C2E2E" },
+    { url = "*", is = "exec", fg = "#8EC07C" },
 
     # Fallback
-    { url = "*", fg = "#E5E5E5" },
-    { url = "*/", fg = "#E95420" },
+    { url = "*", fg = "#D4D4D4" },
+    { url = "*/", fg = "#73DACA" },
 ]
 
 # : ]]]
@@ -174,41 +174,41 @@ rules = [
 # ==========================================
 prepend_conds = [
     # 隐藏文件夹
-    { if = "dir & hidden", text = "", fg = "#555555" },
+    { if = "dir & hidden", text = "", fg = "#4A4A4A" },
     
-    # 普通文件夹 - 橙色
-    { if = "dir", text = "", fg = "#E95420" },
+    # 普通文件夹 - 青绿
+    { if = "dir", text = "", fg = "#73DACA" },
     
-    # 损坏的符号链接 - 红色
-    { if = "orphan", text = "󰌌", fg = "#E74C3C" },
-    # 正常符号链接 - 紫色
-    { if = "link", text = "󰌷", fg = "#9B3C8E" },
+    # 损坏的符号链接 - 红
+    { if = "orphan", text = "󰌌", fg = "#FB4934" },
+    # 正常符号链接 - 蓝灰
+    { if = "link", text = "󰌷", fg = "#83A598" },
     
     # 可执行文件 (排除文件夹)
-    { if = "exec & !dir", text = "󰆧", fg = "#8AE234" },
+    { if = "exec & !dir", text = "󰆧", fg = "#8EC07C" },
 
-    # 普通隐藏文件 - 暗淡
-    { if = "hidden", text = "󰈙", fg = "#555555" },
+    # 普通隐藏文件
+    { if = "hidden", text = "󰈙", fg = "#4A4A4A" },
 ]
 
 # ==========================================
 # 2. 预设目录 (特殊文件夹图标与主色调)
 # ==========================================
 prepend_dirs = [
-    # 常用主目录 - 橙色
-    { name = "Desktop", text = "", fg = "#E95420" },
-    { name = "Documents", text = "󰈙", fg = "#E95420" },
-    { name = "Downloads", text = "󰇚", fg = "#E95420" },
-    { name = "Pictures", text = "󰉏", fg = "#E95420" },
-    { name = "Music", text = "󰎆", fg = "#E95420" },
-    { name = "Videos", text = "󰕧", fg = "#E95420" },
-    { name = "Public", text = "", fg = "#E95420" },
+    # 常用主目录 - 青绿
+    { name = "Desktop", text = "", fg = "#73DACA" },
+    { name = "Documents", text = "󰈙", fg = "#73DACA" },
+    { name = "Downloads", text = "󰇚", fg = "#73DACA" },
+    { name = "Pictures", text = "󰉏", fg = "#73DACA" },
+    { name = "Music", text = "󰎆", fg = "#73DACA" },
+    { name = "Videos", text = "󰕧", fg = "#73DACA" },
+    { name = "Public", text = "", fg = "#73DACA" },
 
-    # 开发/配置目录 - 紫色
-    { name = ".config", text = "", fg = "#9B3C8E" },
-    { name = ".git", text = "󰊢", fg = "#9B3C8E" },
-    { name = "Github", text = "󰊢", fg = "#9B3C8E" },
-    { name = "src", text = "", fg = "#9B3C8E" },
+    # 开发/配置目录 - 金色
+    { name = ".config", text = "", fg = "#EBCB8B" },
+    { name = ".git", text = "󰊢", fg = "#EBCB8B" },
+    { name = "Github", text = "󰊢", fg = "#EBCB8B" },
+    { name = "src", text = "", fg = "#EBCB8B" },
 ]
 
 # ==========================================
@@ -216,48 +216,48 @@ prepend_dirs = [
 # ==========================================
 prepend_exts = [
     # 图片/媒体 - 绿色
-    { name = "png", text = "󰉏", fg = "#8AE234" },
-    { name = "jpg", text = "󰉏", fg = "#8AE234" },
-    { name = "jpeg", text = "󰉏", fg = "#8AE234" },
-    { name = "webp", text = "󰉏", fg = "#8AE234" },
-    { name = "svg", text = "󰜡", fg = "#8AE234" },
-    { name = "mp4", text = "󰕧", fg = "#8AE234" },
-    { name = "mkv", text = "󰕧", fg = "#8AE234" },
-    { name = "mp3", text = "󰎆", fg = "#8AE234" },
-    { name = "flac", text = "󰎆", fg = "#8AE234" },
+    { name = "png", text = "󰉏", fg = "#8EC07C" },
+    { name = "jpg", text = "󰉏", fg = "#8EC07C" },
+    { name = "jpeg", text = "󰉏", fg = "#8EC07C" },
+    { name = "webp", text = "󰉏", fg = "#8EC07C" },
+    { name = "svg", text = "󰜡", fg = "#8EC07C" },
+    { name = "mp4", text = "󰕧", fg = "#8EC07C" },
+    { name = "mkv", text = "󰕧", fg = "#8EC07C" },
+    { name = "mp3", text = "󰎆", fg = "#8EC07C" },
+    { name = "flac", text = "󰎆", fg = "#8EC07C" },
 
-    # 档案/压缩包 - 亮橙
-    { name = "zip", text = "󰛫", fg = "#FF8C00" },
-    { name = "tar", text = "󰛫", fg = "#FF8C00" },
-    { name = "gz", text = "󰛫", fg = "#FF8C00" },
-    { name = "rar", text = "󰛫", fg = "#FF8C00" },
-    { name = "7z", text = "󰛫", fg = "#FF8C00" },
+    # 档案/压缩包 - 橙色
+    { name = "zip", text = "󰛫", fg = "#FAB387" },
+    { name = "tar", text = "󰛫", fg = "#FAB387" },
+    { name = "gz", text = "󰛫", fg = "#FAB387" },
+    { name = "rar", text = "󰛫", fg = "#FAB387" },
+    { name = "7z", text = "󰛫", fg = "#FAB387" },
 
-    # 代码/配置文件 - 橙色
-    { name = "conf", text = "", fg = "#E95420" },
-    { name = "toml", text = "", fg = "#E95420" },
-    { name = "yaml", text = "", fg = "#E95420" },
-    { name = "yml", text = "", fg = "#E95420" },
-    { name = "json", text = "", fg = "#E95420" },
-    { name = "sh", text = "", fg = "#E95420" },
-    { name = "bash", text = "", fg = "#E95420" },
-    { name = "py", text = "", fg = "#E95420" },
-    { name = "rs", text = "", fg = "#E95420" },
-    { name = "c", text = "", fg = "#E95420" },
-    { name = "cpp", text = "", fg = "#E95420" },
-    { name = "md", text = "", fg = "#E95420" },
-    { name = "txt", text = "󰈙", fg = "#E5E5E5" },
+    # 代码/配置文件 - 青绿
+    { name = "conf", text = "", fg = "#73DACA" },
+    { name = "toml", text = "", fg = "#73DACA" },
+    { name = "yaml", text = "", fg = "#73DACA" },
+    { name = "yml", text = "", fg = "#73DACA" },
+    { name = "json", text = "", fg = "#73DACA" },
+    { name = "sh", text = "", fg = "#73DACA" },
+    { name = "bash", text = "", fg = "#73DACA" },
+    { name = "py", text = "", fg = "#73DACA" },
+    { name = "rs", text = "", fg = "#73DACA" },
+    { name = "c", text = "", fg = "#73DACA" },
+    { name = "cpp", text = "", fg = "#73DACA" },
+    { name = "md", text = "", fg = "#73DACA" },
+    { name = "txt", text = "󰈙", fg = "#D4D4D4" },
 ]
 
 # ==========================================
 # 4. 预设特定文件名
 # ==========================================
 prepend_files = [
-    { name = "PKGBUILD", text = "", fg = "#E95420" },
-    { name = "README.md", text = "󰂺", fg = "#9B3C8E" },
-    { name = "Makefile", text = "", fg = "#9B3C8E" },
-    { name = ".bashrc", text = "", fg = "#9B3C8E" },
-    { name = ".zshrc", text = "", fg = "#9B3C8E" },
+    { name = "PKGBUILD", text = "", fg = "#73DACA" },
+    { name = "README.md", text = "󰂺", fg = "#EBCB8B" },
+    { name = "Makefile", text = "", fg = "#EBCB8B" },
+    { name = ".bashrc", text = "", fg = "#EBCB8B" },
+    { name = ".zshrc", text = "", fg = "#EBCB8B" },
 ]
 
 # : ]]]
