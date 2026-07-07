@@ -5,5 +5,5 @@ function global:conda {
 
     # 此时 conda 函数已被初始化脚本重新定义（或成为外部命令别名）
     # 转发当前命令参数给真正的 conda
-    conda @args
+     conda @args
 }

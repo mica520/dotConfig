@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-07-06T11:59:53.818-00:00",
+	"CreationDate" : "2026-07-06T20:42:47.370-00:00",
 	"Sources" : 
 	[
 		{
@@ -149,6 +149,10 @@
 				{
 					"PackageIdentifier" : "sxyazi.yazi",
 					"Version" : "26.5.6"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.PowerToys",
+					"Version" : "0.100.2"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VisualStudioCode",
