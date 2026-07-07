@@ -51,3 +51,12 @@ vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
     vim.cmd("mkview")
   end,
 })
+
+-- Disable Spell Check for Markdown(.md) file
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+
+  callback = function()
+    vim.opt_local.spell = false
+  end,
+})

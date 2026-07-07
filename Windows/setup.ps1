@@ -13,8 +13,9 @@ $Green = "Green"
 $Yellow = "Yellow"
 $Blue = "Blue"
 
-# Backup directory with timestamp
-$BackupDir = Join-Path $HOME "dotfiles_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+# ---------- Global Variables ----------
+# Backup directory with timestamp (used by install)
+$BackupDir = $null
 
 # ---------- Helper Functions ----------
 
@@ -43,6 +44,90 @@ function Test-WinStow {
         exit 1
     }
 }
+
+# ---------- NEW: Environment Variable Functions ----------
+
+# Export current environment variables (User and Machine) to a JSON file
+function Export-Environment {
+    param(
+        [string]$Path
+    )
+    if ([string]::IsNullOrEmpty($Path)) {
+        $Path = Join-Path $PWD "environment.json"
+    }
+    Write-Host "Exporting environment variables to $Path ..." -ForegroundColor $Blue
+    $envData = @{
+        User = [Environment]::GetEnvironmentVariables('User')
+        Machine = [Environment]::GetEnvironmentVariables('Machine')
+    }
+    $json = $envData | ConvertTo-Json -Depth 1
+    # Ensure directory exists
+    $parent = Split-Path $Path -Parent
+    if (!(Test-Path $parent)) {
+        New-Item -ItemType Directory -Path $parent -Force | Out-Null
+    }
+    $json | Out-File -FilePath $Path -Encoding UTF8
+    Write-Host "Export complete." -ForegroundColor $Green
+}
+
+# Import environment variables from a JSON file (requires admin for Machine variables)
+function Import-Environment {
+    param(
+        [string]$Path
+    )
+    if (!(Test-Path $Path)) {
+        Write-Error "File not found: $Path"
+        return
+    }
+    Write-Host "Importing environment variables from $Path ..." -ForegroundColor $Blue
+    $data = Get-Content $Path -Raw | ConvertFrom-Json
+
+    # Check admin rights for Machine variables
+    $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    if ($data.PSObject.Properties.Name -contains 'Machine' -and !$isAdmin) {
+        Write-Warning "System (Machine) variables require administrator privileges. Please run as Administrator to import them."
+    }
+
+    # Import User variables
+    if ($data.User) {
+        foreach ($key in $data.User.PSObject.Properties) {
+            $name = $key.Name
+            $value = $key.Value
+            try {
+                [Environment]::SetEnvironmentVariable($name, $value, 'User')
+                Write-Host "  Set user variable: $name = $value" -ForegroundColor $Green
+            } catch {
+                Write-Warning "Failed to set user variable $name : $_"
+            }
+        }
+    }
+
+    # Import Machine variables (if admin)
+    if ($data.Machine -and $isAdmin) {
+        foreach ($key in $data.Machine.PSObject.Properties) {
+            $name = $key.Name
+            $value = $key.Value
+            try {
+                [Environment]::SetEnvironmentVariable($name, $value, 'Machine')
+                Write-Host "  Set system variable: $name = $value" -ForegroundColor $Green
+            } catch {
+                Write-Warning "Failed to set system variable $name : $_"
+            }
+        }
+    }
+    Write-Host "Import complete. Please restart your session or computer for changes to take effect." -ForegroundColor $Yellow
+}
+
+# Backup environment variables to a timestamped directory (useful for snapshot)
+function Backup-Environment {
+    $backupDir = Join-Path $HOME "env_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+    New-Item -ItemType Directory -Path $backupDir -Force | Out-Null
+    $envFile = Join-Path $backupDir "environment.json"
+    Export-Environment -Path $envFile
+    Write-Host "Environment variables backed up to: $envFile" -ForegroundColor $Green
+}
+
+# ---------- END NEW ----------
 
 # Uninstall all symlinks
 function Do-Uninstall {
@@ -95,7 +180,8 @@ function Do-Install {
     Write-Host "Deploying Windows configurations..." -ForegroundColor $Green
     Test-WinStow
 
-    # Create backup directory
+    # Create backup directory (global variable used by Backup-Target)
+    $script:BackupDir = Join-Path $HOME "dotfiles_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
     New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
     Write-Host "Backup directory: $BackupDir" -ForegroundColor $Yellow
 
@@ -142,9 +228,16 @@ function Do-Install {
             Backup-Target -Target $pkg.Target -BackupSubPath $pkg.BackupSubPath
         }
     }
-    Write-Host "Backup complete.`n" -ForegroundColor $Green
+    Write-Host "Backup of configurations complete." -ForegroundColor $Green
 
-    Write-Host "Creating symlinks..." -ForegroundColor $Blue
+    # ---------- NEW: Backup environment variables ----------
+    Write-Host "`nBacking up current environment variables..." -ForegroundColor $Blue
+    $envBackupFile = Join-Path $BackupDir "environment.json"
+    Export-Environment -Path $envBackupFile
+    Write-Host "Environment variables backed up to $envBackupFile" -ForegroundColor $Green
+    # ---------- END NEW ----------
+
+    Write-Host "`nCreating symlinks..." -ForegroundColor $Blue
 
     # Packages that use direct symbolic links (instead of winstow)
     $directPackages = @("nvim", "vscode-extensions", "powershell-profile")
@@ -268,18 +361,40 @@ switch ($args[0]) {
     "install" { Do-Install }
     "uninstall" { Do-Uninstall }
     "reinstall" { Do-Uninstall; Do-Install }
+    "backup-env" { Backup-Environment }
+    "export-env" {
+        if ($args[1]) {
+            Export-Environment -Path $args[1]
+        } else {
+            Export-Environment -Path (Join-Path $PWD "environment.json")
+        }
+    }
+    "import-env" {
+        if ($args[1]) {
+            Import-Environment -Path $args[1]
+        } else {
+            Write-Host "Usage: setup.ps1 import-env <file>" -ForegroundColor $Red
+        }
+    }
     default {
         Write-Host @"
 Usage: setup.ps1 [command]
 
 Commands:
-  install      Install/update all configurations (with auto backup)
+  install      Install/update all configurations (with auto backup of configs AND environment variables)
   uninstall    Remove all symlinks
   reinstall    Uninstall then reinstall
+  backup-env   Backup current environment variables to a timestamped directory
+  export-env   Export environment variables to a JSON file (default: ./environment.json)
+               Usage: export-env [<path>]
+  import-env   Import environment variables from a JSON file (requires admin for system vars)
+               Usage: import-env <path>
   help         Show this help
 
 Example:
   .\setup.ps1 install
+  .\setup.ps1 export-env D:\dotfiles\env.json
+  .\setup.ps1 import-env D:\dotfiles\env.json
 "@
     }
 }

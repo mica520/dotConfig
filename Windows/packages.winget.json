@@ -1,6 +1,6 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-07-06T20:42:47.370-00:00",
+	"CreationDate" : "2026-07-07T20:34:06.767-00:00",
 	"Sources" : 
 	[
 		{
@@ -13,6 +13,10 @@
 				{
 					"PackageIdentifier" : "Git.Git",
 					"Version" : "2.55.0.2"
+				},
+				{
+					"PackageIdentifier" : "shinchiro.mpv",
+					"Version" : "v0.41.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.OneDrive",
@@ -45,6 +49,14 @@
 				{
 					"PackageIdentifier" : "Microsoft.CLRTypesSQLServer.2019",
 					"Version" : "15.0.2000.5"
+				},
+				{
+					"PackageIdentifier" : "gerardog.gsudo",
+					"Version" : "2.6.1"
+				},
+				{
+					"PackageIdentifier" : "JohnMacFarlane.Pandoc",
+					"Version" : "3.10"
 				},
 				{
 					"PackageIdentifier" : "Starship.Starship",
@@ -95,6 +107,10 @@
 					"Version" : "14.51.36247.0"
 				},
 				{
+					"PackageIdentifier" : "Yarn.Yarn",
+					"Version" : "1.22.22"
+				},
+				{
 					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x86",
 					"Version" : "14.51.36247.0"
 				},
@@ -115,6 +131,10 @@
 					"Version" : "15.1.0"
 				},
 				{
+					"PackageIdentifier" : "DuckDB.cli",
+					"Version" : "1.5.4"
+				},
+				{
 					"PackageIdentifier" : "Fastfetch-cli.Fastfetch",
 					"Version" : "2.65.2"
 				},
@@ -125,6 +145,10 @@
 				{
 					"PackageIdentifier" : "MathiasCodes.Winstow",
 					"Version" : "0.3.0"
+				},
+				{
+					"PackageIdentifier" : "MediaArea.MediaInfo",
+					"Version" : "26.05"
 				},
 				{
 					"PackageIdentifier" : "SumatraPDF.SumatraPDF",

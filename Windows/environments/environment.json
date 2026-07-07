@@ -1,0 +1,25 @@
+﻿{
+  "User": {
+    "Path": "C:\\Users\\Administrator\\scoop\\shims;C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Administrator\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Packages\\sxyazi.yazi_Microsoft.Winget.Source_8wekyb3d8bbwe\\yazi-x86_64-pc-windows-msvc;C:\\texlive\\2026\\bin\\windows;C:\\Users\\Administrator\\AppData\\Local\\SumatraPDF;C:\\Windows.old\\Users\\Administrator\\AppData\\Local\\kingsoft\\WPS Office\\12.1.0.26895\\office6\\addons\\everythingsearch\\everythingbinary;C:\\Users\\Administrator\\.dotnet\\tools;C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Fastfetch-cli.Fastfetch_Microsoft.Winget.Source_8wekyb3d8bbwe;C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Packages\\MathiasCodes.Winstow_Microsoft.Winget.Source_8wekyb3d8bbwe;C:\\Program Files\\7-Zip;C:\\Program Files (x86)\\GnuWin32\\bin;C:\\Users\\Administrator\\AppData\\Local\\Programs\\Vim;C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Packages\\BrechtSanders.WinLibs.POSIX.UCRT_Microsoft.Winget.Source_8wekyb3d8bbwe\\mingw64\\bin;C:\\Users\\Administrator\\AppData\\Roaming\\npm;C:\\Users\\Administrator\\AppData\\Local\\PowerToys\\DSCModules\\;C:\\Users\\Administrator\\AppData\\Local\\Yarn\\bin;C:\\Users\\Administrator\\AppData\\Local\\Pandoc\\",
+    "TEMP": "C:\\Users\\Administrator\\AppData\\Local\\Temp",
+    "OneDrive": "C:\\Users\\Administrator\\OneDrive",
+    "TMP": "C:\\Users\\Administrator\\AppData\\Local\\Temp"
+  },
+  "Machine": {
+    "PROCESSOR_REVISION": "4401",
+    "ComSpec": "C:\\WINDOWS\\system32\\cmd.exe",
+    "TEMP": "C:\\WINDOWS\\TEMP",
+    "PROCESSOR_LEVEL": "25",
+    "USERNAME": "SYSTEM",
+    "DriverData": "C:\\Windows\\System32\\Drivers\\DriverData",
+    "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC",
+    "Path": "C:\\Program Files\\glzr.io\\GlazeWM\\\\cli;C:\\Program Files (x86)\\VMware\\VMware Workstation\\bin\\;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Users\\Administrator\\Documents;C:\\Program Files\\YASB\\;C:\\Program Files\\Neovim\\bin;C:\\Program Files\\dotnet\\;C:\\Program Files\\MATLAB\\R2024b\\runtime\\win64;C:\\Program Files\\MATLAB\\R2024b\\bin;C:\\Program Files\\Microsoft SQL Server\\170\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files (x86)\\Windows Kits\\10\\Windows Performance Toolkit\\;C:\\Program Files\\Git\\cmd;C:\\Program Files\\glzr.io\\Zebar\\;C:\\Program Files\\starship\\bin\\;C:\\Program Files\\nodejs\\;C:\\Program Files (x86)\\Yarn\\bin\\;C:\\Program Files\\gsudo\\Current",
+    "NUMBER_OF_PROCESSORS": "12",
+    "TMP": "C:\\WINDOWS\\TEMP",
+    "windir": "C:\\WINDOWS",
+    "PROCESSOR_ARCHITECTURE": "AMD64",
+    "PSModulePath": "C:\\Program Files\\WindowsPowerShell\\Modules;C:\\WINDOWS\\system32\\WindowsPowerShell\\v1.0\\Modules",
+    "PROCESSOR_IDENTIFIER": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "OS": "Windows_NT"
+  }
+}

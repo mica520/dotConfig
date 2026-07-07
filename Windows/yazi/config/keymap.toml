@@ -141,7 +141,7 @@ prepend_keymap = [
   { on = "<PageDown>", run = "arrow 50%",   desc = "向下移动半页" },
   { on = "<S-PageUp>",     run = "arrow -100%", desc = "向上移动一页" },
   { on = "<S-PageDown>",   run = "arrow 100%",  desc = "向下移动一页" },
-  { on = [ "g", "g" ], run = "arrow top", desc = "顶部" },
+  # { on = [ "g", "g" ], run = "arrow top", desc = "顶部" },
   { on = [ "g", "b" ], run = "arrow bot", desc = "底部" },
 
   # =======================
