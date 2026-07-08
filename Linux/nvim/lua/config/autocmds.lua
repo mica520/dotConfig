@@ -32,14 +32,31 @@ end
 vim.api.nvim_create_autocmd({ "BufWinLeave" }, {
   pattern = "*.*",
   callback = function()
+    -- 获取当前缓冲区的名称和类型
+    local bufname = vim.api.nvim_buf_get_name(0)
+    local buftype = vim.api.nvim_get_option_value("buftype", { buf = 0 })
+
+    -- 如果是终端缓冲区、无名称缓冲区或特殊文件类型，则跳过
+    if
+      bufname:match("term://") -- yazi 等终端缓冲区
+      or buftype == "terminal" -- 终端类型
+      or buftype == "nofile" -- 无文件缓冲区
+      or buftype == "help" -- 帮助文档
+      or bufname == ""
+    then -- 未命名缓冲区
+      return
+    end
+
+    -- 只有普通文件缓冲区才执行 mkview
     vim.cmd("mkview")
   end,
 })
 
--- 恢复折叠状态（在进入缓冲区时尝试加载视图，但忽略失败情况）
-vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-  pattern = "*.*",
+-- Disable Spell Check for Markdown(.md) file
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+
   callback = function()
-    pcall(vim.cmd, "loadview") -- 使用 pcall 安全执行
+    vim.opt_local.spell = false
   end,
 })

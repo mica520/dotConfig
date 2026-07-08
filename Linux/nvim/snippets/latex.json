@@ -1,0 +1,34 @@
+{
+  "fr": {
+    "prefix": "fr",
+    "body": [
+      "\\frac{${1:分子}}{${2:分母}}"
+    ],
+    "description": "分数 (frac)"
+  },
+  "beg": {
+    "prefix": "beg",
+    "body": [
+      "\\begin{${1:环境名}}",
+      "  ${0:内容}",
+      "\\end{${1}}"
+    ],
+    "description": "LaTeX 环境 (begin/end)"
+  },
+  "行内数学": {
+    "prefix": "mk",
+    "body": [
+      "$${1:输入公式}$"
+    ],
+    "description": "行内数学公式 (mk)"
+  },
+  "行间数学": {
+    "prefix": "MK",
+    "body": [
+      "$$",
+      "  ${1:}",
+      "$$"
+    ],
+    "description": "行间数学公式 (MK)"
+  }
+}
