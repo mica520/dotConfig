@@ -211,3 +211,70 @@ pandoc-cn() {
     echo "❌ 转换失败，请检查字体名称或 Markdown 语法。"
   fi
 }
+
+# ============================================================
+#  覆盖 uv 命令，使得 uv init 自动添加 [tool.pyright]
+#  用法：与原 uv 命令完全相同
+#  示例：uv init my_project
+#        uv init .
+#        uv add requests
+# ============================================================
+uv() {
+  # 检查是否执行的是 init 子命令
+  if [[ "$1" == "init" ]]; then
+    # 移除第一个参数 "init"，保留其余参数
+    shift
+    local init_args=("$@")
+
+    # 执行原始的 uv init，传递所有参数
+    echo "🚀 执行: uv init ${init_args[*]}"
+    if ! command uv init "${init_args[@]}"; then
+      echo "❌ uv init 执行失败"
+      return 1
+    fi
+
+    # --- 以下是自动添加 pyright 配置的逻辑 ---
+
+    # 确定项目目录（第一个非选项参数）
+    local project_dir="."
+    for arg in "${init_args[@]}"; do
+      # 跳过以 '-' 开头的选项
+      if [[ "$arg" != -* ]]; then
+        project_dir="$arg"
+        break
+      fi
+    done
+
+    # 如果项目目录不存在，跳过
+    if [[ ! -d "$project_dir" ]]; then
+      echo "⚠️ 警告: 项目目录 '$project_dir' 不存在，跳过 pyright 配置"
+      return 0
+    fi
+
+    local toml_path="$project_dir/pyproject.toml"
+    if [[ ! -f "$toml_path" ]]; then
+      echo "⚠️ 警告: 未找到 $toml_path，跳过 pyright 配置"
+      return 0
+    fi
+
+    # 检查是否已经包含 [tool.pyright]
+    if grep -q "^\[tool\.pyright\]" "$toml_path"; then
+      echo "ℹ️ pyright 配置已存在，无需重复添加"
+      return 0
+    fi
+
+    # 追加配置到文件末尾
+    {
+      echo ""
+      echo "[tool.pyright]"
+      echo "venvPath = \".\""
+      echo "venv = \".venv\""
+    } >>"$toml_path"
+
+    echo "✅ 已自动添加 pyright 配置到 $toml_path"
+
+  else
+    # 不是 init 子命令，直接透传
+    command uv "$@"
+  fi
+}
