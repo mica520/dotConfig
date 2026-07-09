@@ -165,7 +165,7 @@ $Packages = @(
 
 function Get-SourcePath {
     param($Pkg)
-    return Join-Path $ScriptDir $Pkg.SourceRoot $Pkg.Source
+    return Join-Path (Join-Path $ScriptDir $Pkg.SourceRoot) $Pkg.Source
 }
 
 function Get-TargetPath {
