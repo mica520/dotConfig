@@ -15,9 +15,8 @@ end, { desc = "Recent Files" })
 -- Ctrl-a: 普通模式下全选
 map("n", "<C-a>", "<Cmd>normal! ggVG<CR>", { desc = "Select all" })
 
--- 用 jj (插入模式) 和 jk (可视模式) 替代 <Esc>
+-- 用 jj (插入模式) 替代 <Esc>
 map("i", "jj", "<Esc>")
-map("v", "jk", "<Esc>")
 
 -- ============================================================================
 --  LuaSnip 代码片段跳转 (插入/选择模式)

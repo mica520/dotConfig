@@ -8,13 +8,15 @@ if [ -x /usr/bin/dircolors ]; then
   alias grep='grep --color=auto'
   alias fgrep='fgrep --color=auto'
   alias egrep='egrep --color=auto'
-  alias c='clear'
+  alias cl='clear'
 fi
 
 # lolcat 染色
-alias cat='\cat "$@" | lolcat'
+# alias cat='\cat "$@" | lolcat'
 alias whoami='\whoami | lolcat'
 alias f='fastfetch | lolcat'
+alias ll='\ls -la | lolcat'
+alias ls='ls | lolcat '
 
 # 系统工具别名（WSL 下使用 Windows 原生 OpenSSH）
 alias ssh='ssh.exe'
@@ -26,6 +28,8 @@ alias sftp='sftp.exe'
 alias m='musicfox.exe'     # 网易云音乐终端版
 alias n='nvim'             # Neovim
 alias t='tmux new-session' # 启动新的 tmux 会话
+alias c='claude'
+alias cc='claude --continue'
 
 # 长命令提醒（alert）
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'

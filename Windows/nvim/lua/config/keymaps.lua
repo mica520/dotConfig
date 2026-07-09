@@ -14,9 +14,7 @@ end, { desc = "Recent Files" })
 
 -- 普通模式下，Ctrl+a 全选
 vim.keymap.set("n", "<C-a>", "<Cmd>normal! ggVG<CR>", { desc = "Select all" })
--- 用普通模式下 jj，可视模式下 jk 替代<esc>
-vim.keymap.set("i", "jj", "<Esc>")
-vim.keymap.set("v", "jk", "<Esc>")
+-- 用普通模式下 jj vim.keymap.set("i", "jj", "<Esc>")
 
 -- 在 keymaps.lua 中
 local map = vim.keymap.set
