@@ -59,5 +59,7 @@ function f { fastfetch | meow }
 Set-Alias -Name s -Value SumatraPDF  
 Set-Alias -Name c -Value  clear  
 Set-Alias -Name sudo -Value  gsudo  
-function t {tmux new}  
+function tn {tmux new}
+function ta {tmux attach -t $args}
+function tl {tmux ls}
 
