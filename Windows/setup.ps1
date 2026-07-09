@@ -11,33 +11,56 @@
     PowerShell 5.0+ is required. Administrator rights are NOT required when
     Windows Developer Mode is enabled (which allows unprivileged symlinks).
 
-.PARAMETER Command
-    install    – Back up existing configs, then create symlinks.
-    uninstall  – Remove all symlinks created by this script.
-    reinstall  – Uninstall then install (clean restart).
-    help       – Show this usage text.
-
-.PARAMETER DryRun
-    Preview what would be changed without actually modifying the filesystem.
-
 .EXAMPLE
     .\setup.ps1 install
     .\setup.ps1 install -DryRun
     .\setup.ps1 uninstall
 #>
 
-[CmdletBinding()]
-param(
-    [Parameter(Position = 0)]
-    [ValidateSet("install", "uninstall", "reinstall", "help")]
-    [string]$Command,
-
-    [switch]$DryRun
-)
-
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $ScriptDir
+
+# ---------- Argument parsing ----------
+$Command = $null
+$DryRun  = $false
+$Help    = $false
+
+for ($i = 0; $i -lt $args.Count; $i++) {
+    switch -Regex ($args[$i]) {
+        '^(-DryRun)$'            { $DryRun = $true }
+        '^(-h|--help|-\?|/h|/help)$' { $Help = $true }
+        '^(install|uninstall|reinstall)$' {
+            if ($null -eq $Command) { $Command = $args[$i] }
+        }
+        default {
+            Write-Warning "Unknown argument: $($args[$i])"
+        }
+    }
+}
+
+if ($Help -or (-not $Command)) {
+    Write-Host @"
+Windows Dotfiles Setup
+
+Usage:
+  .\setup.ps1 <command> [-DryRun]
+
+Commands:
+  install      Deploy configurations (backup existing, then symlink)
+  uninstall    Remove all managed symlinks
+  reinstall    Uninstall + install (clean restart)
+
+Options:
+  -DryRun      Preview all changes without touching the filesystem
+
+Examples:
+  .\setup.ps1 install
+  .\setup.ps1 install -DryRun
+  .\setup.ps1 reinstall
+"@
+    exit 0
+}
 
 # ---------- Colors ----------
 $C_Red    = "Red"
@@ -352,9 +375,6 @@ function Do-Install {
 # ===================================================================
 # Main Entry Point
 # ===================================================================
-
-# Support both named -Command and positional first argument
-if (-not $Command) { $Command = $args[0] }
 
 switch ($Command) {
     "install"   { Do-Install }
