@@ -151,7 +151,7 @@ widgets:
       providers:
         - provider: "DeepSeek"
           api_endpoint: "https://api.deepseek.com"
-          credential: "sk-48e4a72070994674877a6b2d95f80d68"
+          credential: "YOUR_DEEPSEEK_API_KEY"
           models:
             - name: "deepseek-v4-flash"
               label: "deepseek-v4-flash"
@@ -195,7 +195,7 @@ widgets:
               instructions: "You are a concise assistant."
         - provider: "OpenAI"
           api_endpoint: "https://api.openai.com/v1"
-          credential: "dsfsfsfs65sd6f56sd5f6"
+          credential: "YOUR_OPENAI_API_KEY"
           models:
             - name: "gpt-3.5-turbo"
               label: "GPT3.5 Turbo"

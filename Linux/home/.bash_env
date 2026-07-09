@@ -1,0 +1,22 @@
+# ----------------------------------------------------------------------
+# 环境初始化 (Conda, NVM, Cargo, Starship)
+# ----------------------------------------------------------------------
+
+# Cargo (Rust)
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+# NVM (Node Version Manager)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Starship 提示符
+export name=mica
+eval "$(starship init bash)"
+
+# ----------------------------------------------------------------------
+# Claude Code 配置
+# ----------------------------------------------------------------------
+export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+export ANTHROPIC_AUTH_TOKEN=sk-7339f2b09792449ea92ad13d921c156f
+export ANTHROPIC_MODEL=deepseek-v4-pro

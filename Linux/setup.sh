@@ -17,11 +17,70 @@ NC='\033[0m' # No Color
 # ---------- 备份目录（带时间戳） ----------
 BACKUP_DIR="$HOME/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
 
+# ---------- 配置发现 ----------
+# 遍历根目录下的子目录，生成 (源路径, 目标路径) 链接对。
+# 新增配置只需在仓库根目录创建目录，无需手动修改此脚本。
+#
+# 约定：
+#   <dir>/              → ~/.config/<dir>   （除以下特殊目录）
+#   starship/           → ~/.config/starship.toml（单文件链接）
+#   tmux/               → ~/.tmux.conf          （链接到 $HOME）
+#   home/               → ~/<每个文件>          （点文件逐个链接）
+#   lazygit/            → ~/.config/lazygit     （自动发现）
+
+# 需要跳过的目录名（不是配置目录）
+SKIP_DIRS=("home" ".git" "trash")
+
+discover_links() {
+  # 遍历仓库根目录下的每个子目录
+  for dir in "$SCRIPT_DIR"/*/; do
+    [ -d "$dir" ] || continue
+    dir="${dir%/}"  # 去掉尾部斜杠
+    local name
+    name="$(basename "$dir")"
+
+    # 跳过非配置目录
+    local skip=false
+    for s in "${SKIP_DIRS[@]}"; do
+      [[ "$name" == "$s" ]] && skip=true && break
+    done
+    $skip && continue
+
+    case "$name" in
+      starship)
+        # 特殊处理：链接单个 toml 文件到 ~/.config/
+        if [ -f "$dir/starship.toml" ]; then
+          echo "$dir/starship.toml|$HOME/.config/starship.toml"
+        fi
+        ;;
+      tmux)
+        # 特殊处理：链接 .tmux.conf 到 $HOME
+        if [ -f "$dir/.tmux.conf" ]; then
+          echo "$dir/.tmux.conf|$HOME/.tmux.conf"
+        fi
+        ;;
+      *)
+        # 默认：整个目录链接到 ~/.config/<name>
+        echo "$dir|$HOME/.config/$name"
+        ;;
+    esac
+  done
+
+  # home/ 目录：每个文件/目录链接到 $HOME
+  local home_dir="$SCRIPT_DIR/home"
+  if [ -d "$home_dir" ]; then
+    for file in "$home_dir"/.*; do
+      local base
+      base="$(basename "$file")"
+      [ "$base" = "." ] || [ "$base" = ".." ] && continue
+      [ -e "$file" ] && echo "$file|$HOME/$base"
+    done
+  fi
+}
+
 # ---------- 工具函数 ----------
 
 # 备份单个文件或目录（如果存在）
-# 参数1: 目标路径 (如 ~/.config/nvim)
-# 参数2: 在备份目录中的相对路径 (如 nvim)
 backup_path() {
   local target="$1"
   local rel_path="$2"
@@ -38,50 +97,22 @@ backup_path() {
   mv "$target" "$backup_target"
 }
 
-# ---------- 卸载功能（删除所有由本脚本创建的链接） ----------
-do_uninstall() {
-  echo -e "${BLUE}🧹 开始移除所有创建的符号链接...${NC}"
-
-  # 删除 ~/.config 下的链接（包括旧的 starship 目录链接）
-  local config_links=("nvim" "yazi" "starship")
-  for link in "${config_links[@]}"; do
-    local target="$HOME/.config/$link"
-    if [ -L "$target" ]; then
-      rm -f "$target"
-      echo -e "  ${GREEN}->${NC} 移除 $target"
-    fi
-  done
-
-  # 新增：删除 ~/.config/starship.toml 链接（新方式）
-  if [ -L "$HOME/.config/starship.toml" ]; then
-    rm -f "$HOME/.config/starship.toml"
-    echo -e "  ${GREEN}->${NC} 移除 ~/.config/starship.toml"
+# 根据目标路径生成备份用的相对路径
+target_to_relpath() {
+  local target="$1"
+  # ~/.config/xxx → xxx
+  # ~/.xxx       → home/.xxx
+  if [[ "$target" == "$HOME/.config/"* ]]; then
+    echo "${target#$HOME/.config/}"
+  else
+    echo "home/${target#$HOME/}"
   fi
-
-  # 删除 home 目录下的点文件链接（仅删除我们创建的）
-  local home_files=(".bashrc" ".gitconfig" ".condarc" ".tmux.conf")
-  for file in "${home_files[@]}"; do
-    local target="$HOME/$file"
-    if [ -L "$target" ]; then
-      rm -f "$target"
-      echo -e "  ${GREEN}->${NC} 移除 $target"
-    fi
-  done
-
-  # 单独处理 ~/.tmux.conf（如果它是由本脚本创建的链接）
-  if [ -L "$HOME/.tmux.conf" ]; then
-    rm -f "$HOME/.tmux.conf"
-    echo -e "  ${GREEN}->${NC} 移除 ~/.tmux.conf"
-  fi
-
-  echo -e "${GREEN}✅ 卸载完成${NC}"
 }
 
-# ---------- 安装核心（全部使用原生 ln 创建链接） ----------
+# ---------- 安装 ----------
 do_install() {
   echo -e "${GREEN}🚀 开始部署 / 更新 Dotfiles ...${NC}"
 
-  # 创建备份目录
   mkdir -p "$BACKUP_DIR"
   echo -e "${YELLOW}📁 备份目录: $BACKUP_DIR${NC}"
 
@@ -94,64 +125,32 @@ do_install() {
 
   echo -e "\n${BLUE}开始备份现有配置...${NC}"
 
-  # 备份所有可能被覆盖的路径
-  backup_path "$HOME/.config/nvim" "nvim"
-  backup_path "$HOME/.config/yazi" "yazi"
-  backup_path "$HOME/.config/starship.toml" "starship/starship.toml" # 备份 starship 配置文件
-  backup_path "$HOME/.bashrc" "home/.bashrc"
-  backup_path "$HOME/.gitconfig" "home/.gitconfig"
-  backup_path "$HOME/.condarc" "home/.condarc"
-  backup_path "$HOME/.tmux.conf" "home/.tmux.conf"
+  # 备份所有将要被覆盖的路径（使用自动发现）
+  while IFS='|' read -r src target; do
+    [ -z "$src" ] && continue
+    local rel_path
+    rel_path="$(target_to_relpath "$target")"
+    backup_path "$target" "$rel_path"
+  done < <(discover_links)
 
   echo -e "${GREEN}✅ 备份完成${NC}\n"
 
   # 确保 ~/.config 存在
   mkdir -p "$HOME/.config"
 
-  echo -e "${BLUE}开始创建符号链接（原生 ln）...${NC}"
+  echo -e "${BLUE}开始创建符号链接...${NC}"
 
-  # ---------- 1. nvim（整个目录链接） ----------
-  echo -e "  ${GREEN}->${NC} 链接 nvim ..."
-  ln -sfn "$SCRIPT_DIR/nvim" "$HOME/.config/nvim"
-
-  # ---------- 2. yazi（整个目录链接） ----------
-  echo -e "  ${GREEN}->${NC} 链接 yazi ..."
-  ln -sfn "$SCRIPT_DIR/yazi" "$HOME/.config/yazi"
-
-  # ---------- 3. starship（改为链接 starship.toml 到 ~/.config/starship.toml） ----------
-  if [ -f "$SCRIPT_DIR/starship/starship.toml" ]; then
-    echo -e "  ${GREEN}->${NC} 链接 starship.toml ..."
-    ln -sfn "$SCRIPT_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
-  else
-    echo -e "  ${YELLOW}-> 跳过 starship（未找到 starship/starship.toml）${NC}"
-  fi
-
-  # ---------- 4. tmux（单独处理 .tmux.conf） ----------
-  if [ -f "$SCRIPT_DIR/tmux/.tmux.conf" ]; then
-    echo -e "  ${GREEN}->${NC} 链接 tmux ..."
-    ln -sfn "$SCRIPT_DIR/tmux/.tmux.conf" "$HOME/.tmux.conf"
-  else
-    echo -e "  ${YELLOW}-> 跳过 tmux（未找到配置文件）${NC}"
-  fi
-
-  # ---------- 5. home 包中的各点文件（分别链接到 ~） ----------
-  echo -e "  ${GREEN}->${NC} 链接 home 包中的点文件 ..."
-  # 列出 home 目录下的所有隐藏文件（排除 . 和 ..）
-  for file in "$SCRIPT_DIR/home"/.*; do
-    base="$(basename "$file")"
-    # 跳过 . 和 ..
-    [ "$base" = "." ] || [ "$base" = ".." ] && continue
-    # 只处理文件或目录（排除非普通文件，但这里都是普通文件）
-    if [ -e "$file" ]; then
-      ln -sfn "$file" "$HOME/$base"
-      echo -e "    -> $HOME/$base"
-    fi
-  done
+  while IFS='|' read -r src target; do
+    [ -z "$src" ] && continue
+    # 确保目标父目录存在
+    mkdir -p "$(dirname "$target")"
+    echo -e "  ${GREEN}->${NC} 链接: $target"
+    ln -sfn "$src" "$target"
+  done < <(discover_links)
 
   # 重新加载 bash 配置
   echo -e "\n${BLUE}重新加载 ~/.bashrc 以使新配置生效...${NC}"
   if [ -f "$HOME/.bashrc" ]; then
-    # shellcheck source=/dev/null
     source "$HOME/.bashrc" 2>/dev/null || true
     echo -e "${GREEN}✅ ~/.bashrc 已重新加载${NC}"
   else
@@ -161,6 +160,23 @@ do_install() {
   echo -e "\n${GREEN}✅ 所有配置已链接完成！${NC}"
   echo -e "📦 旧配置已备份至: ${YELLOW}$BACKUP_DIR${NC}"
   echo -e "   （每次运行都会生成新的备份目录，旧备份不会丢失）"
+}
+
+# ---------- 卸载 ----------
+do_uninstall() {
+  echo -e "${BLUE}🧹 开始移除所有创建的符号链接...${NC}"
+
+  local removed=0
+  while IFS='|' read -r src target; do
+    [ -z "$src" ] && continue
+    if [ -L "$target" ]; then
+      rm -f "$target"
+      echo -e "  ${GREEN}->${NC} 移除 $target"
+      ((removed++))
+    fi
+  done < <(discover_links)
+
+  echo -e "${GREEN}✅ 卸载完成（移除 $removed 个链接）${NC}"
 }
 
 # ---------- 帮助信息 ----------
@@ -173,6 +189,10 @@ show_help() {
   uninstall (或 -u)   移除所有已创建的符号链接
   reinstall (或 -r)   先卸载再重新安装
   help      (或 -h)   显示此帮助信息
+
+约定：
+  在仓库根目录新增一个目录（如 kitty/），setup.sh 会自动
+  将其链接到 ~/.config/<目录名>，无需手动修改脚本。
 
 示例:
   ./setup.sh install    # 一键部署（旧配置备份到带时间戳的新目录）

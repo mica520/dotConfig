@@ -1,0 +1,20 @@
+# Logs
+*.log
+*.log.*
+
+# Backups
+*.backup
+*.bak
+
+# Yazi runtime state
+yazi/state/
+
+# Yazi compiled cache
+yazi/config/state/
+
+# OS junk
+desktop.ini
+Thumbs.db
+
+# Temporary files
+*.tmp
