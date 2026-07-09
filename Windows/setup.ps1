@@ -19,6 +19,10 @@
 
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+# Resolve to absolute path in case the script was invoked with a relative path
+if ($ScriptDir -eq "." -or -not [System.IO.Path]::IsPathRooted($ScriptDir)) {
+    $ScriptDir = Resolve-Path $ScriptDir
+}
 Set-Location $ScriptDir
 
 # ---------- Argument parsing ----------
@@ -165,7 +169,9 @@ $Packages = @(
 
 function Get-SourcePath {
     param($Pkg)
-    return Join-Path (Join-Path $ScriptDir $Pkg.SourceRoot) $Pkg.Source
+    # Avoid inserting "." into the path when SourceRoot is the repo root
+    $base = if ($Pkg.SourceRoot -eq ".") { $ScriptDir } else { Join-Path $ScriptDir $Pkg.SourceRoot }
+    return Join-Path $base $Pkg.Source
 }
 
 function Get-TargetPath {
