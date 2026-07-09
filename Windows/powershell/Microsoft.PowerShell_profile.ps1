@@ -35,11 +35,7 @@ function winget {
 
     # 如果是 install/upgrade/uninstall，则导出列表
     if ($args[0] -match "install|upgrade|uninstall") {
-        # Derive repo root from profile symlink target: $PROFILE is symlinked
-        # from <repo>/powershell/Microsoft.PowerShell_profile.ps1, so the
-        # real directory is <repo>/powershell. One level up = repo root.
-        $repoRoot = Split-Path (Get-Item $PROFILE).DirectoryName
-        $exportPath = Join-Path $repoRoot "packages.winget.json"
+        $exportPath = "$HOME\dotConfig\windows\packages.winget.json"
         $dir = Split-Path $exportPath -Parent
         if (!(Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
 
@@ -56,14 +52,12 @@ function winget {
 
 function tmux { wsl tmux $args }
 . (Join-Path (Split-Path $PROFILE) "starship_init.ps1")
-. (Join-Path (Split-Path $PROFILE) "conda_lazy.ps1")
+. (Join-Path (Split-Path $PROFILE) "conda_init.ps1")
 
 Set-Alias -Name n -Value nvim 
 function f { fastfetch | meow }
 Set-Alias -Name s -Value SumatraPDF  
 Set-Alias -Name c -Value  clear  
 Set-Alias -Name sudo -Value  gsudo  
-function tn {tmux new}
-function ta {tmux attach -t $args}
-function tl {tmux ls}
+function t {tmux new}  
 
