@@ -57,7 +57,10 @@ function tmux { wsl tmux $args }
 Set-Alias -Name n -Value nvim 
 function f { fastfetch | meow }
 Set-Alias -Name s -Value SumatraPDF  
-Set-Alias -Name c -Value  clear  
+Set-Alias -Name cl -Value  clear  
 Set-Alias -Name sudo -Value  gsudo  
+
 function t {tmux new}  
+function ta {tmux attach $args }
+function tl {tmux ls}
 
