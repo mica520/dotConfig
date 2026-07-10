@@ -30,6 +30,7 @@ alias n='nvim'             # Neovim
 alias t='tmux new-session' # 启动新的 tmux 会话
 alias c='claude'
 alias cc='claude --continue'
+alias s='SumatraPDF.exe'
 
 # 长命令提醒（alert）
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'

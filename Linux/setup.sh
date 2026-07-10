@@ -18,22 +18,22 @@ NC='\033[0m' # No Color
 BACKUP_DIR="$HOME/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
 
 # ---------- 配置发现 ----------
-# 遍历根目录下的子目录，生成 (源路径, 目标路径) 链接对。
+# 遍历根目录下的子目录（包括隐藏目录），生成 (源路径, 目标路径) 链接对。
 # 新增配置只需在仓库根目录创建目录，无需手动修改此脚本。
 #
 # 约定：
-#   <dir>/              → ~/.config/<dir>   （除以下特殊目录）
+#   <dir>/              → ~/.config/<dir>       （默认规则）
 #   starship/           → ~/.config/starship.toml（单文件链接）
-#   tmux/               → ~/.tmux.conf          （链接到 $HOME）
-#   home/               → ~/<每个文件>          （点文件逐个链接）
-#   lazygit/            → ~/.config/lazygit     （自动发现）
+#   tmux/               → ~/.tmux.conf           （链接到 $HOME）
+#   .vscode-server/     → ~/.vscode-server/      （递归镜像每个文件）
+#   home/               → ~/<每个文件>           （点文件逐个链接）
 
 # 需要跳过的目录名（不是配置目录）
 SKIP_DIRS=("home" ".git" "trash")
 
 discover_links() {
-  # 遍历仓库根目录下的每个子目录
-  for dir in "$SCRIPT_DIR"/*/; do
+  # 遍历仓库根目录下的每个子目录（包括隐藏目录）
+  for dir in "$SCRIPT_DIR"/*/ "$SCRIPT_DIR"/.[!.]*/; do
     [ -d "$dir" ] || continue
     dir="${dir%/}"  # 去掉尾部斜杠
     local name
@@ -48,16 +48,21 @@ discover_links() {
 
     case "$name" in
       starship)
-        # 特殊处理：链接单个 toml 文件到 ~/.config/
         if [ -f "$dir/starship.toml" ]; then
           echo "$dir/starship.toml|$HOME/.config/starship.toml"
         fi
         ;;
       tmux)
-        # 特殊处理：链接 .tmux.conf 到 $HOME
         if [ -f "$dir/.tmux.conf" ]; then
           echo "$dir/.tmux.conf|$HOME/.tmux.conf"
         fi
+        ;;
+      .vscode-server)
+        # 递归链接每个文件，保持目录结构镜像到 ~/.vscode-server/
+        while IFS= read -r -d '' file; do
+          local rel="${file#$dir/}"
+          echo "$file|$HOME/.vscode-server/$rel"
+        done < <(find "$dir" -type f -print0)
         ;;
       *)
         # 默认：整个目录链接到 ~/.config/<name>
@@ -100,10 +105,13 @@ backup_path() {
 # 根据目标路径生成备份用的相对路径
 target_to_relpath() {
   local target="$1"
-  # ~/.config/xxx → xxx
-  # ~/.xxx       → home/.xxx
+  # ~/.config/xxx        → xxx
+  # ~/.vscode-server/xxx → .vscode-server/xxx
+  # ~/.xxx               → home/.xxx
   if [[ "$target" == "$HOME/.config/"* ]]; then
     echo "${target#$HOME/.config/}"
+  elif [[ "$target" == "$HOME/.vscode-server/"* ]]; then
+    echo ".vscode-server/${target#$HOME/.vscode-server/}"
   else
     echo "home/${target#$HOME/}"
   fi
