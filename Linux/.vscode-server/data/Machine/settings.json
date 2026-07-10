@@ -1,151 +1,145 @@
 {
-    // ==================== LaTeX Workshop 核心配置 ====================
-    "latex-workshop.latex.recipes": [
-        {
-            "name": "xelatex -> biber -> xelatex*2 (中文支持)",
-            "tools": [
-                "xelatex",
-                "biber",
-                "xelatex",
-                "xelatex"
-            ]
-        },
-        {
-            "name": "xelatex (中文支持)",
-            "tools": [
-                "xelatex"
-            ]
-        },
-        {
-            "name": "pdflatex -> biber -> pdflatex*2",
-            "tools": [
-                "pdflatex",
-                "biber",
-                "pdflatex",
-                "pdflatex"
-            ]
-        },
-        {
-            "name": "latexmk (xelatex)",
-            "tools": [
-                "latexmk_xelatex"
-            ]
-        }
-    ],
-    
-    // ==================== 记住上次使用的配方 ====================
-    "latex-workshop.latex.recipe.default": "lastUsed",  // 关键配置：记住上次使用的配方
-    
-    // ==================== 编译工具定义 ====================
-    "latex-workshop.latex.tools": [
-        {
-            "name": "xelatex",
-            "command": "xelatex",
-            "args": [
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "%DOC%"
-            ]
-        },
-        {
-            "name": "pdflatex",
-            "command": "pdflatex",
-            "args": [
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "%DOC%"
-            ]
-        },
-        {
-            "name": "biber",
-            "command": "biber",
-            "args": [
-                "%DOCFILE%"
-            ]
-        },
-        {
-            "name": "bibtex",
-            "command": "bibtex",
-            "args": [
-                "%DOCFILE%"
-            ]
-        },
-        {
-            "name": "latexmk_xelatex",
-            "command": "latexmk",
-            "args": [
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "-xelatex",
-                "-outdir=%OUTDIR%",
-                "%DOC%"
-            ]
-        }
-    ],
-    
-    // ==================== 自动清理配置 ====================
-    "latex-workshop.latex.autoClean.run": "onBuilt",
-    "latex-workshop.latex.clean.fileTypes": [
-        "*.aux",
-        "*.bbl",
-        "*.blg",
-        "*.idx",
-        "*.ind",
-        "*.lof",
-        "*.lot",
-        "*.out",
-        "*.toc",
-        "*.acn",
-        "*.acr",
-        "*.alg",
-        "*.glg",
-        "*.glo",
-        "*.gls",
-        "*.ist",
-        "*.fls",
-        "*.log",
-        "*.fdb_latexmk",
-        "*.nav",
-        "*.snm",
-        "*.vrb",
-        "*.synctex.gz",
-        "*.synctex(busy)",
-        "*.run.xml",
-        "*.bcf",
-        "*.blg",
-        "*.auxlock"
-    ],
-    "latex-workshop.latex.clean.subfolder.enabled": true,
-    
-    // ==================== 自动编译配置 ====================
-    "latex-workshop.latex.autoBuild.run": "onSave",
-    "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": true,
-    
-    // ==================== PDF 预览配置 ====================
-    "latex-workshop.view.pdf.viewer": "tab",
-    "latex-workshop.view.pdf.zoom": "page-width",
-    "latex-workshop.view.pdf.ref.viewer.autoSync": true,
-    "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
-    
-    // ==================== 其他辅助配置 ====================
-    "latex-workshop.synctex.afterBuild.enabled": true,
-    "latex-workshop.message.error.show": false,
-    "latex-workshop.message.warning.show": false,
-    "latex-workshop.latex.outDir": "%DIR%",
-    "latex-workshop.latex.texDirs": [
-        "."
-    ],
-    "latex-workshop.latex.indent.andEnvironments.enabled": true,
-    "latex-workshop.showContextMenu": true,
-    "latex-workshop.statusBar.show": {
-        "compiler": true,
-        "recipe": true,
-        "viewer": true,
-        "errors": true,
-        "warnings": true
+  // ==================== LaTeX Workshop 核心配置 ====================
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "xelatex -> biber -> xelatex*2 (支持中文)",
+      "tools": [
+        "xelatex",
+        "biber",
+        "xelatex",
+        "xelatex"
+      ]
     },
-    "editor.fontFamily": "'JetBrainsMono Nerd Font Propo',悠哉字体,Consolas, 'Courier New', monospace"
+    {
+      "name": "xelatex (支持中文)",
+      "tools": [
+        "xelatex"
+      ]
+    },
+    {
+      "name": "pdflatex -> biber -> pdflatex*2(英文文档)",
+      "tools": [
+        "pdflatex",
+        "biber",
+        "pdflatex",
+        "pdflatex"
+      ]
+    },
+    {
+      "name": "latexmk (xelatex)",
+      "tools": [
+        "latexmk_xelatex"
+      ]
+    }
+  ],
+  // ==================== 记住上次使用的配方 ====================
+  "latex-workshop.latex.recipe.default": "lastUsed", // 关键配置：记住上次使用的配方
+  // ==================== 编译工具定义 ====================
+  "latex-workshop.latex.tools": [
+    {
+      "name": "xelatex",
+      "command": "xelatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "pdflatex",
+      "command": "pdflatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "biber",
+      "command": "biber",
+      "args": [
+        "%DOCFILE%"
+      ]
+    },
+    {
+      "name": "bibtex",
+      "command": "bibtex",
+      "args": [
+        "%DOCFILE%"
+      ]
+    },
+    {
+      "name": "latexmk_xelatex",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-xelatex",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ]
+    }
+  ],
+  // ==================== 自动清理配置 ====================
+  "latex-workshop.latex.autoClean.run": "onBuilt",
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux",
+    "*.bbl",
+    "*.blg",
+    "*.idx",
+    "*.ind",
+    "*.lof",
+    "*.lot",
+    "*.out",
+    "*.toc",
+    "*.acn",
+    "*.acr",
+    "*.alg",
+    "*.glg",
+    "*.glo",
+    "*.gls",
+    "*.ist",
+    "*.fls",
+    "*.log",
+    "*.fdb_latexmk",
+    "*.nav",
+    "*.snm",
+    "*.vrb",
+    "*.synctex.gz",
+    "*.synctex(busy)",
+    "*.run.xml",
+    "*.bcf",
+    "*.blg",
+    "*.auxlock"
+  ],
+  "latex-workshop.latex.clean.subfolder.enabled": true,
+  // ==================== 自动编译配置 ====================
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": true,
+  // ==================== PDF 预览配置 ====================
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.view.pdf.zoom": "page-width",
+  "latex-workshop.view.pdf.ref.viewer.autoSync": true,
+  "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+  // ==================== 其他辅助配置 ====================
+  "latex-workshop.synctex.afterBuild.enabled": true,
+  "latex-workshop.message.error.show": false,
+  "latex-workshop.message.warning.show": false,
+  "latex-workshop.latex.outDir": "%DIR%",
+  "latex-workshop.latex.texDirs": [
+    "."
+  ],
+  "latex-workshop.latex.indent.andEnvironments.enabled": true,
+  "latex-workshop.showContextMenu": true,
+  "latex-workshop.statusBar.show": {
+    "compiler": true,
+    "recipe": true,
+    "viewer": true,
+    "errors": true,
+    "warnings": true
+  },
+  "editor.fontFamily": "'JetBrainsMono Nerd Font Propo',悠哉字体,Consolas, 'Courier New', monospace"
 }

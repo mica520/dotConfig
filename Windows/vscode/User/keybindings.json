@@ -1,11 +1,24 @@
-// 将键绑定放在此文件中以覆盖默认值
 [
-    {
-        "key": "ctrl+t",
-        "command": "workbench.action.newWindow"
-    },
-    {
-        "key": "ctrl+shift+n",
-        "command": "-workbench.action.newWindow"
-    }
+  // 使用 Ctrl+h/j/k/l 在编辑器组之间导航
+  {
+    "key": "ctrl+h",
+    "command": "workbench.action.navigateLeft"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "workbench.action.navigateRight"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.navigateUp"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.navigateDown"
+  },
+  // 使用 Ctrl+Shift+E 聚焦到文件资源管理器 (文件树)
+  {
+    "key": "ctrl+shift+e",
+    "command": "workbench.files.action.focusFilesExplorer"
+  }
 ]
