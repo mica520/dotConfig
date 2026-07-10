@@ -6,7 +6,7 @@
 
 - **代码化管理** — 所有配置纳入 Git 版本控制，可追溯、可回滚
 - **符号链接部署** — 配置源文件留在仓库中，通过符号链接映射到系统路径，修改仓库即生效
-- **自动发现** — Linux 端新增配置目录无需修改脚本，约定优于配置
+- **自动发现** — 新增配置目录无需修改脚本，约定优于配置
 - **安全备份** — 每次安装自动将旧配置备份到带时间戳的目录，放心迁移
 
 ---
@@ -22,11 +22,16 @@ dotConfig/
 │   ├── manual-packages.list   # apt 手动安装的软件包清单
 │   ├── home/                  # 家目录点文件 → 链接到 ~/
 │   │   ├── .bashrc            # Shell 核心配置 + 补全
-│   │   ├── .bash_aliases      # 别名定义
+│   │   ├── .bash_aliases      # 别名（含 claude、nvim、tmux 等快捷入口）
 │   │   ├── .bash_functions    # 自定义函数（y, apt, conda, pandoc-cn, uv）
 │   │   ├── .bash_env          # 环境初始化（Cargo, NVM, Starship, Claude Code）
 │   │   ├── .gitconfig         # Git 全局配置
 │   │   └── .condarc           # Conda 镜像源配置
+│   ├── .vscode-server/        # VS Code Server 配置（WSL Remote）
+│   │   ├── data/Machine/
+│   │   │   └── settings.json  # LaTeX / C++ / Python / Jupyter / Markdown
+│   │   └── extensions/
+│   │       └── extensions.json # 已安装扩展清单
 │   ├── nvim/                  # → ~/.config/nvim（LazyVim）
 │   ├── tmux/                  # → ~/.tmux.conf（基于 gpakosz/.tmux）
 │   ├── starship/              # → ~/.config/starship.toml（Catppuccin Mocha 主题）
@@ -78,25 +83,36 @@ cd Linux
 
 ### 约定
 
-在 `Linux/` 目录下新增任意子目录（如 `kitty/`），`setup.sh` 会**自动**将其链接到 `~/.config/<目录名>`，无需手动修改脚本。
+`setup.sh` 会自动遍历仓库目录（包括隐藏目录），按文件名决定链接方式。新增配置只需创建目录，无需修改脚本。
 
-| 目录 | 特殊处理 |
+| 目录 | 链接方式 |
 | --- | --- |
-| `starship/` | 链接单个文件 `starship.toml` → `~/.config/starship.toml` |
-| `tmux/` | 链接 `.tmux.conf` → `~/.tmux.conf` |
+| `starship/` | 单个文件 `starship.toml` → `~/.config/starship.toml` |
+| `tmux/` | `.tmux.conf` → `~/.tmux.conf` |
+| `.vscode-server/` | 递归镜像每个文件到 `~/.vscode-server/`，保持目录结构 |
 | `home/` | 逐个链接目录内的点文件到 `~` |
-| 其他目录 | 整个目录链接到 `~/.config/<目录名>` |
+| 其他目录（含隐藏目录） | 整个目录链接到 `~/.config/<目录名>` |
 
 ### 管理的配置
 
 | 工具 | 说明 |
 | --- | --- |
-| **Bash** | `.bashrc`（核心配置 + 补全）、`.bash_aliases`（别名）、`.bash_functions`（自定义函数）、`.bash_env`（环境初始化） |
+| **Bash** | `.bashrc`（核心配置 + 补全）、`.bash_aliases`（别名：`c`→Claude Code、`n`→Neovim、`t`→Tmux 等）、`.bash_functions`（自定义函数）、`.bash_env`（环境初始化） |
+| **VS Code Server** | WSL Remote 连接的 Server 端配置：LaTeX Workshop 编译链（XeLaTeX + Biber）、C/C++ 工具链、Python + Jupyter、Markdown 增强 |
 | **Neovim** | 基于 LazyVim 发行版，含代码补全、Markdown 预览、LaTeX 等插件 |
 | **Tmux** | 基于 gpakosz/.tmux 配置，含鼠标支持、状态栏美化 |
 | **Starship** | Catppuccin Mocha 主题，跨 Shell 提示符 |
 | **Yazi** | 终端文件管理器，含 Catppuccin 主题和按键映射 |
 | **Lazygit** | Git 终端 UI |
+
+### VS Code Server 配置说明
+
+WSL 下通过 VS Code 的 Remote 连接时，实际的编辑器设置存储在 `~/.vscode-server/` 而非 Windows 端的 `%APPDATA%\Code\User\`。本仓库通过 `.vscode-server/` 目录统一管理这些配置：
+
+- **settings.json** — 包含完整的 LaTeX 编译配方（xelatex → biber → xelatex×2，支持中文）、自动编译、自动清理、C/C++ 工具链、Python Jupyter 环境
+- **extensions.json** — 扩展清单，覆盖 LaTeX、C/C++、Python、Markdown、Jupyter 等场景
+
+新机器上 code-server 启动时会自动读取 `extensions.json` 安装对应扩展。
 
 ### 软件包清单
 
@@ -156,6 +172,19 @@ PowerShell Profile 内置了 `winget` 包装函数：每次执行 `winget instal
 ```powershell
 winget import -i packages.winget.json
 ```
+
+---
+
+## 设计细节：Windows + WSL2 双端 VS Code 配置
+
+本项目同时管理两套 VS Code 配置，覆盖不同的使用场景：
+
+| 场景 | 配置位置 | 链接目标 |
+| --- | --- | --- |
+| Windows 本地 VS Code | `Windows/vscode/User/` | `%APPDATA%\Code\User` |
+| WSL Remote VS Code Server | `Linux/.vscode-server/` | `~/.vscode-server/` |
+
+两套配置分工明确：Windows 端管 UI/快捷键/主题，WSL 端管语言工具链（LaTeX、C++、Python），避免重复配置。
 
 ---
 
