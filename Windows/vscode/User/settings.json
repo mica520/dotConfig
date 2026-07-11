@@ -1,11 +1,40 @@
 {
-    "git.ignoreMissingGitWarning": true,
-    "editor.fontFamily": "'JetBrainsMono Nerd Font Propo',悠哉字体,Consolas, 'Courier New', monospace",
-    "workbench.editor.empty.hint": "hidden",
-    "git.openRepositoryInParentFolders": "never",
-    "security.allowedUNCHosts": [
-        "wsl.localhost"
-    ],
-    "workbench.colorTheme": "Atom One Dark",
-    "editor.fontSize": 18
+  // --------- VSCodeVim 核心设置 ----------
+  "vim.leader": "<space>",
+  "vim.useSystemClipboard": true,
+  "vim.hlsearch": true,
+
+  "vim.insertModeKeyBindings": [
+    { "before": ["j", "j"], "after": ["<Esc>"] }
+  ],
+
+  "vim.normalModeKeyBindingsNonRecursive": [
+    { "before": ["<leader>", "f", "r"], "commands": ["workbench.action.openRecent"] },
+    { "before": ["<C-a>"], "after": ["g", "g", "V", "G"] },
+    { "before": ["<C-j>"], "after": ["<C-d>"] },
+    { "before": ["<C-k>"], "after": ["<C-u>"] },
+    // 新增：Shift+H 切换上一个标签页（向左）
+    { "before": ["<S-h>"], "commands": ["workbench.action.previousEditor"] },
+    // 新增：Shift+L 切换下一个标签页（向右）
+    { "before": ["<S-l>"], "commands": ["workbench.action.nextEditor"] },
+    // 新增：<leader>bd 关闭当前标签页
+    { "before": ["<leader>", "b", "d"], "commands": ["workbench.action.closeActiveEditor"]}, 
+    { "before": ["<leader>", "b", "a"], "command": "markdown.showPreviewToSide"}
+  ],
+
+  "vim.handleKeys": {
+    "<C-a>": true
+  },
+
+  // --------- 你的其他原有设置（保持不变） ----------
+  "git.ignoreMissingGitWarning": true,
+  "editor.fontFamily": "'JetBrainsMono Nerd Font Propo',悠哉字体,Consolas, 'Courier New', monospace",
+  "workbench.editor.empty.hint": "hidden",
+  "git.openRepositoryInParentFolders": "never",
+  "security.allowedUNCHosts": ["wsl.localhost"],
+  "workbench.colorTheme": "Atom One Dark",
+  "editor.fontSize": 18,
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  }
 }
