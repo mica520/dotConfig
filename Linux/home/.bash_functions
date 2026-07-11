@@ -45,18 +45,60 @@ conda() {
 
 # Pandoc 转中文 PDF
 pandoc-cn() {
-  if [ $# -eq 0 ]; then
-    echo "用法: pandoc-cn <输入.md> [输出.pdf] [字号]"
-    echo "示例: pandoc-cn 复习.md 复习.pdf 17pt"
-    echo "提示: 字号默认 12pt，支持 10pt/11pt/12pt(标准) 或 14pt/17pt/20pt(extarticle)"
+  local input=""
+  local output=""
+  local size="12pt"
+  local doc_class="article"
+
+  # 手动解析选项
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -o)
+        if [[ -z "$2" ]]; then
+          echo "错误: -o 需要指定输出文件名"
+          return 1
+        fi
+        output="$2"
+        shift 2
+        ;;
+      -s|--size)
+        if [[ -z "$2" ]]; then
+          echo "错误: -s 需要指定字号"
+          return 1
+        fi
+        size="$2"
+        shift 2
+        ;;
+      -*)
+        echo "错误: 未知选项 $1"
+        echo "用法: pandoc-cn [-o <输出.pdf>] [-s <字号>] <输入.md>"
+        return 1
+        ;;
+      *)
+        # 第一个非选项参数作为输入文件
+        if [[ -z "$input" ]]; then
+          input="$1"
+          shift
+        else
+          echo "错误: 只能指定一个输入文件"
+          return 1
+        fi
+        ;;
+    esac
+  done
+
+  if [[ -z "$input" ]]; then
+    echo "错误: 未指定输入 Markdown 文件"
+    echo "用法: pandoc-cn [-o <输出.pdf>] [-s <字号>] <输入.md>"
     return 1
   fi
 
-  local input="$1"
-  local output="${2:-${input%.md}.pdf}"
-  local size="${3:-12pt}"
+  # 若未指定输出，则生成同名 PDF（去掉原扩展名后追加 .pdf）
+  if [[ -z "$output" ]]; then
+    output="${input%.*}.pdf"
+  fi
 
-  local doc_class="article"
+  # 根据字号选择文档类
   if [[ "$size" == "14pt" || "$size" == "17pt" || "$size" == "20pt" ]]; then
     doc_class="extarticle"
     echo "检测到大字号 ($size)，自动切换至 extarticle 文档类。"
@@ -66,7 +108,8 @@ pandoc-cn() {
     -V documentclass="$doc_class" \
     -V CJKmainfont="Yozai Font" \
     -V mainfont="FiraCode Nerd Font" \
-    -V fontsize="$size"
+    -V fontsize="$size" \
+    -V geometry:margin=2cm   # ← 添加这一行，减小页边距
 
   if [ $? -eq 0 ]; then
     echo "✅ 转换成功！文件生成于: $output"
